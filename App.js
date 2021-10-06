@@ -19,7 +19,10 @@ export default function App() {
   return (
 	 <NavigationContainer>
       <Tab.Navigator
-	    initialRouteName="Inbox"		
+	    initialRouteName="Inbox"
+        activeColor="#f0edf6"
+        inactiveColor="#3e2465"
+        barStyle={{ backgroundColor: '#694fad' }}		
 	  >
        <Tab.Screen
         name="Inbox"
@@ -27,7 +30,7 @@ export default function App() {
         options={{
           tabBarLabel: 'Inbox',
           tabBarIcon: ({ color }) => (
-            <MaterialCommunityIcons name="home" color={color} size={26} />
+            <MaterialCommunityIcons name="inbox" color={color} size={26} />
           ),
         }}
       />
@@ -37,7 +40,7 @@ export default function App() {
         options={{
           tabBarLabel: 'Drafts',
           tabBarIcon: ({ color }) => (
-            <MaterialCommunityIcons name="home" color={color} size={26} />
+            <MaterialCommunityIcons name="note" color={color} size={26} />
           ),
         }}
       />
