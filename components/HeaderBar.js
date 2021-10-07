@@ -11,13 +11,16 @@ const IconButton = (props) => {
           {
             backgroundColor: pressed
               ? 'rgb(210, 230, 255)'
-              : '#adb'
+              : props.bgcolor,
+			  color: pressed
+              ? '#000'
+              : '#fff'
           },
           styles.iconButton
         ]}
 	 >
 	 <View style={[styles.hc,props.style]}>
-	   <MaterialCommunityIcons name={props.name} color={props.color} size={26} />
+	   <MaterialCommunityIcons name={props.name}  size={26} />
 	 </View>
       </Pressable>
 	);
@@ -26,8 +29,8 @@ const IconButton = (props) => {
 const HeaderBar = () => {
 	return (
 	 <View style={styles.container}>
-	  <IconButton name='plus' action={() => {newButtonClick()}} style={styles.newButton}/>
-	  <IconButton name='account' action={() => {profileButtonClick()}} style={styles.profileButton}/>
+	  <IconButton name='plus' bgcolor='#694fad' action={() => {newButtonClick()}} style={styles.newButton}/>
+	  <IconButton name='account'  bgcolor='#694fad' action={() => {profileButtonClick()}} style={styles.profileButton}/>
      </View>	
 	);
 }
@@ -42,8 +45,7 @@ const styles = StyleSheet.create({
   },
   hc: {
 	  width: 80,
-	  height: 80,
-	  borderRadius: 80/2,
+	  height: 20,
 	  overflow: 'hidden',
 	  padding: 20
   },
