@@ -1,5 +1,5 @@
-import React from 'react';
-import { Platform, StyleSheet, View, Text } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { Platform, StyleSheet, View, Text, FlatList, SafeAreaView, StatusBar } from 'react-native';
 
 function DraftsScreen(){
 	return (

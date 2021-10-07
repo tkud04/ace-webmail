@@ -11,6 +11,7 @@ import InboxScreen from './navigation/InboxScreen';
 import DraftsScreen from './navigation/DraftsScreen';
 
 
+
 import * as helpers from './Helpers';
 
 const Tab = createMaterialBottomTabNavigator();
@@ -28,7 +29,7 @@ export default function App() {
         name="Inbox"
         component={InboxScreen}
         options={{
-          tabBarLabel: 'Inbox',
+          tabBarLabel: 'Inbox',  
           tabBarIcon: ({ color }) => (
             <MaterialCommunityIcons name="inbox" color={color} size={26} />
           ),

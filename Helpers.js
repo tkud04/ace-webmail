@@ -21,18 +21,58 @@ export function tryParseJSON(jsonString){
 
 export function getInbox(){
 	
-const ret = [
+let ret = [
   {
     id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
-    title: 'First Item',
+    from: 'First Item',
+    subject: 'First Item',
+    msg: 'First Item',
   },
   {
-    id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
-    title: 'Second Item',
+    id: 'bd7asdfea-c1b6-46c2-aed5-3ad53abb28ba',
+    from: 'Second Item',
+    subject: 'Second Item',
+    msg: 'Second Item',
+  },{
+    id: 'bd7acmkea-s2b1-46c2-aed5-3ad53abb28ba',
+    from: 'Third Item',
+    subject: 'Third Item',
+    msg: 'Third Item',
+  },{
+    id: 'bdbzcbea-x36y-46c2-aed5-3ad53abb28ba',
+    from: 'Fourth Item',
+    subject: 'Fourth Item',
+    msg: 'Fourth Item',
+  },
+];
+
+return ret;
+}
+
+export function fetchInbox(){
+	
+let ret = [
+  {
+    id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
+    from: 'First Item',
+    subject: 'First Item updated',
+    msg: 'First Item updated',
   },
   {
-    id: '58694a0f-3da1-471f-bd96-145571e29d72',
-    title: 'Third Item',
+    id: 'bd7asdfea-c1b6-46c2-aed5-3ad53abb28ba',
+    from: 'Second Item',
+    subject: 'Second Item updated',
+    msg: 'Second Item updated',
+  },{
+    id: 'bd7acmkea-s2b1-46c2-aed5-3ad53abb28ba',
+    from: 'Third Item',
+    subject: 'Third Item updated',
+    msg: 'Third Item updated',
+  },{
+    id: 'bdbzcbea-x36y-46c2-aed5-3ad53abb28ba',
+    from: 'Fourth Item',
+    subject: 'Fourth Item updated',
+    msg: 'Fourth Item updated',
   },
 ];
 
