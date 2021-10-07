@@ -2,11 +2,19 @@ import React from 'react';
 import {StatusBar, StyleSheet, Pressable, View, Text, Image } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
+const newButtonClick = () => {
+	console.log('new button clicked');
+}
+
+const profileButtonClick = () => {
+	console.log('profile button clicked');
+}
+
 const IconButton = (props) => {
 	
 	return (
 	<Pressable
-	   onPress={() =>{props.action}}
+	   onPress={props.action}
 	   style={({ pressed }) => [
           {
             backgroundColor: pressed
@@ -29,8 +37,12 @@ const IconButton = (props) => {
 const HeaderBar = () => {
 	return (
 	 <View style={styles.container}>
-	  <IconButton name='plus' bgcolor='#694fad' action={() => {newButtonClick()}} style={styles.newButton}/>
-	  <IconButton name='account'  bgcolor='#694fad' action={() => {profileButtonClick()}} style={styles.profileButton}/>
+	  <IconButton name='plus' bgcolor='#694fad' action={newButtonClick} style={styles.newButton}/>
+	  <View style={styles.logoView}>
+	  <Image source={require('../assets/logo.png')}  style={{ width: 60, height: 60 }}/>
+	  <Text style={styles.logoText}>Webmail</Text>
+	  </View>
+	  <IconButton name='account'  bgcolor='#694fad' action={profileButtonClick} style={styles.profileButton}/>
      </View>	
 	);
 }
@@ -41,7 +53,7 @@ const styles = StyleSheet.create({
 	  flex: 1,
 	flexDirection: 'row',
 	justifyContent: 'space-between',
-	borderBottomWidth:1,
+	borderBottomWidth:0.8,
   },
   hc: {
 	  width: 80,
@@ -53,6 +65,12 @@ const styles = StyleSheet.create({
 	  alignItems: 'flex-start',
   },
   profileButton: {
+	  alignItems: 'flex-end',
+  }, 
+  logoView: {
+	 
+  },
+  logoText: {
 	  alignItems: 'flex-end',
   },
 });

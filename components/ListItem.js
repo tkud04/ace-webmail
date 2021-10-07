@@ -1,11 +1,13 @@
 import React from 'react';
-import {StatusBar, StyleSheet, View, Text, Image } from 'react-native';
+import {StatusBar, StyleSheet, View, Pressable, Text, Image } from 'react-native';
 
 const getLetter = (str) => {
 	return str.substr(0,1);
 }
 
-
+ const showMessage = (id) => {
+	 console.log(`Showing email with id ${id}`);
+  };
 
 const ItemAvatar = (props) => {
 	return (
@@ -29,10 +31,22 @@ const ListItem = (props) => {
 	let i = props.item;
 	console.log('i: ',i);
 	return (
+	<Pressable
+	   onPress={() =>{showMessage(i.id)}}
+	   style={({ pressed }) => [
+          {
+            backgroundColor: pressed
+              ? 'rgb(0, 0, 0)'
+              : 'white'
+          },
+          styles.listButton
+        ]}
+	 >
 	 <View style={styles.item}>
 	  <ItemAvatar letter={getLetter(i.from)}/>
 	  <ItemCaption from={i.from} subject={i.subject} extract={i.msg}/>
      </View>	
+	 </Pressable>
 	);
 }
 
@@ -44,7 +58,7 @@ const styles = StyleSheet.create({
 	flexDirection: 'row',
 	
 	backgroundColor: '#fff',
-	borderBottomWidth: 1
+	borderBottomWidth: 0.8
   },
   caption: {
 	  padding: 5,

@@ -4,32 +4,18 @@ import { Platform, StyleSheet, View, Text, Pressable, FlatList, SafeAreaView, St
 import * as helpers from '../Helpers';
 import ListItem from '../components/ListItem.js';
 import HeaderBar from '../components/HeaderBar';
-
- const showMessage = (id) => {
-	 console.log(`Showing email with id ${id}`);
-  };
  
  const renderItem = ({ item }) => {
    // const backgroundColor = item.id === selectedId ? "#6e3b6e" : "#f9c2ff";
   //  const color = item.id === selectedId ? 'white' : 'black';
 
     return (
-	 <Pressable
-	   onPress={() =>{showMessage(item.id)}}
-	   style={({ pressed }) => [
-          {
-            backgroundColor: pressed
-              ? 'rgb(0, 0, 0)'
-              : 'white'
-          },
-          styles.listButton
-        ]}
-	 >
+	 
       <ListItem
         item={item}
         backgroundColor="#6e3b6e"
       />
-	 </Pressable>
+	 
     );
   };
 
