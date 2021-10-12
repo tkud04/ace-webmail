@@ -1,10 +1,90 @@
 import React, { useState, useEffect } from 'react';
-import { Platform, StyleSheet, View, Text, FlatList, SafeAreaView, StatusBar } from 'react-native';
+import { Platform, StyleSheet, View, Text, TextInput, Dimensions } from 'react-native';
+import AwesomeButton from "react-native-really-awesome-button";
+import * as helpers from '../Helpers';
+//getValueFor(event.nativeEvent.text);
+
+
 
 function LoginScreen(){
+	const [u, setU] = useState("");
+	const [p, setP] = useState("");
+	const [validation, setValidation] = useState(false);
+	
+	const login = async () => {
+	console.log("[u,p]: ",[u,p]);
+	if(u != "" || p != ""){
+	try {
+		   let fd = new FormData();
+		 fd.append("u",u);
+		 fd.append("p",p);
+		 
+	//create request
+	let url = `${helpers.API}/hello`;
+	const req = new Request(url,{method: 'POST', body: fd});
+      const response = await fetch(url, 
+	  {
+        method: 'POST',
+
+		headers: {
+         'Content-Type': 'multipart/form-data'
+        },
+        body: fd
+       });
+      const dt = await response.text();
+      console.log("dt: ",dt);
+    } catch (error) {
+      console.error(error);
+    }
+    }
+	else{
+		setValidation(true);
+	}
+}
+
 	return (
 	   <View style={styles.container}>
-	     <Text>Your drafts will be displayed here</Text>
+	     <Text style={styles.caption}>Enter your credentials to continue:</Text>
+	     
+		 <View style={styles.formGroup}>
+		   <Text>Username:</Text>
+		    <TextInput
+              style={styles.ti}
+              onChangeText={t => {console.log("u: ",t); setU(t)}}
+              placeholder="Your username or email address"
+            />
+		  </View>
+		  
+		  <View style={styles.formGroup}>
+		   <Text>Password:</Text>
+		    <TextInput
+              style={styles.ti}
+			  secureTextEntry={true}
+              onChangeText={t => setP(t)}
+              placeholder="Your password"
+            />
+		  </View>
+		  
+		  {validation && <Text style={styles.validation}>Please fill in the required fields and try again</Text>}
+		  
+		   <AwesomeButton
+		      type="round"
+			  activeOpacity={0.5}
+			  width={Dimensions.get('window').width-20}
+        textColor="#fff"
+		backgroundColor="rgb(0,0,255)"
+        style={styles.loginButton}
+             progress
+             onPress={next => {
+              /** Do Something **/
+			  setValidation(false);
+			  login();
+			  console.log("moving..");
+              next();
+             }}
+    >
+      Submit
+    </AwesomeButton>
 	   </View>
 	);
 }
@@ -13,8 +93,32 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: 'flex-start',
+	marginTop: 30,
+	marginLeft: 10,
+    //justifyContent: 'center',
+  },
+  caption: {
+    fontSize: 18,
+	fontWeight: "bold"
+  },
+  validation: {
+    fontSize: 16,
+	fontWeight: "bold",
+	color: "red"
+  },
+  ti: {
+	  padding: 10,
+	   width: Dimensions.get('window').width,
+  },
+  formGroup: {
+	  marginTop: 30,
+	 // padding: 10
+  },
+  loginButton: {
+	 alignItems: 'center',
+	 
+	 marginTop: 30,
   },
 });
 

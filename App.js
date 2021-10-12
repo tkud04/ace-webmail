@@ -1,6 +1,6 @@
 import 'react-native-gesture-handler';
 import { StatusBar } from 'expo-status-bar';
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useContext } from 'react';
 import { Platform, StyleSheet, View, Text } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
@@ -26,6 +26,7 @@ export default function App() {
 	const [isAppReady, setIsAppReady] = useState(false);
 	const [loggedIn, setLoggedIn] = useState(false);
 	const [tk, setTk] = useState(null);
+	
 	
 	useEffect(() => {
     async function prepare() {

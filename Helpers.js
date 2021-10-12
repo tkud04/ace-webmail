@@ -4,7 +4,8 @@ import * as SecureStore from 'expo-secure-store';
 
 //import RNPaystack from 'react-native-paystack';
 //import {showMessage, hideMessage} from 'react-native-flash-message';
- 
+export const API = "https://mail.aceluxurystore.com/api";
+
 export function tryParseJSON(jsonString){
     try {
         var o = JSON.parse(jsonString);
@@ -95,4 +96,10 @@ let ret = [
 ];
 
 return ret;
+}
+
+export function serializeJSON(data) {
+  return Object.keys(data).map(function (keyName) {
+    return encodeURIComponent(keyName) + '=' + encodeURIComponent(data[keyName])
+  }).join('&');
 }
