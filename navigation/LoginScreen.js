@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Platform, StyleSheet, View, Text, TextInput, Dimensions } from 'react-native';
 import AwesomeButton from "react-native-really-awesome-button";
 import * as helpers from '../Helpers';
-//getValueFor(event.nativeEvent.text);
-
+import UserContext from '../UserContext';
 
 
 function LoginScreen(){
@@ -11,9 +10,10 @@ function LoginScreen(){
 	const [p, setP] = useState("");
 	const [validation, setValidation] = useState(false);
 	const [badLogin, setBadLogin] = useState(false);
+	const ctx = useContext(UserContext);
 	
 	const login = async (cb) => {
-//	console.log("[u,p]: ",[u,p]);
+	
 	if(u != "" || p != ""){
 	try {
 		   let fd = new FormData();
@@ -34,12 +34,14 @@ function LoginScreen(){
        });
       const dt = await response.json();
       console.log("dt: ",dt);
+	  console.log("ctx in login screen: ",ctx);
 	  
 	  if(dt.status == "ok"){
 		  let tk = dt.tk;
 		  helpers.save('ace_tk',tk);
-		  //setTk(ttk);
-		  //setIsLoggedIn(true);
+		  ctx.setTk(tk);
+		  ctx.setU(u);
+		  ctx.setLoggedIn(true);
 
 	  }
 	  else{

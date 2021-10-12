@@ -9,6 +9,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 
 
 import SplashScreen from './components/SplashScreen.js';
+import { UserProvider } from './UserContext';
 
 import AuthStack from './navigation/AuthStack';
 import InboxStack from './navigation/InboxStack';
@@ -26,7 +27,15 @@ export default function App() {
 	const [isAppReady, setIsAppReady] = useState(false);
 	const [loggedIn, setLoggedIn] = useState(false);
 	const [tk, setTk] = useState(null);
-	
+	const [u, setU] = useState(null);
+	let ctx = {
+				loggedIn: loggedIn,
+				setLoggedIn: setLoggedIn,
+				tk: tk,
+				setTk: setTk,
+				u: u,
+				setU: setU
+			};
 	
 	useEffect(() => {
     async function prepare() {
@@ -35,8 +44,13 @@ export default function App() {
         //await Font.loadAsync(Entypo.font);
 		let ttk = await helpers.getValueFor("ace_tk");
 		console.log("ttk: ",ttk);
-		setTk(ttk);
-		if(tk != null) setIsLoggedIn(true);
+		
+		
+		if(tk != null){
+			setTk(ttk);
+		    setIsLoggedIn(true);
+			
+		}
 		
         // Artificially delay for two seconds to simulate a slow loading
         // experience. Please remove this if you copy and paste the code!
@@ -60,6 +74,7 @@ export default function App() {
   }
    let irn = loggedIn ? "InboxStack" : "AuthStack";
   return (
+     <UserProvider value={ctx}>
 	 <NavigationContainer>
       <Tab.Navigator
 	    initialRouteName={irn}
@@ -126,7 +141,7 @@ export default function App() {
        
       </Tab.Navigator>
 	  </NavigationContainer>
-
+     </UserProvider>
   );
 }
 
