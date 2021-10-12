@@ -7,8 +7,10 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
-import InboxScreen from './navigation/InboxScreen';
-import DraftsScreen from './navigation/DraftsScreen';
+import InboxStack from './navigation/InboxStack';
+import DraftsStack from './navigation/DraftsStack';
+import SentStack from './navigation/SentStack';
+import MoreStack from './navigation/MoreStack';
 
 
 
@@ -20,14 +22,15 @@ export default function App() {
   return (
 	 <NavigationContainer>
       <Tab.Navigator
-	    initialRouteName="Inbox"
+	    initialRouteName="InboxStack"
         activeColor="#f0edf6"
         inactiveColor="#3e2465"
-        barStyle={{ backgroundColor: '#694fad' }}		
+        barStyle={{ backgroundColor: '#694fad' }}
+        		
 	  >
        <Tab.Screen
-        name="Inbox"
-        component={InboxScreen}
+        name="InboxStack"
+        component={InboxStack}
         options={{
           tabBarLabel: 'Inbox',  
           tabBarIcon: ({ color }) => (
@@ -36,10 +39,30 @@ export default function App() {
         }}
       />
 	  <Tab.Screen
-        name="Drafts"
-        component={DraftsScreen}
+        name="DraftsStack"
+        component={DraftsStack}
         options={{
           tabBarLabel: 'Drafts',
+          tabBarIcon: ({ color }) => (
+            <MaterialCommunityIcons name="note" color={color} size={26} />
+          ),
+        }}
+      />
+	  <Tab.Screen
+        name="SentStack"
+        component={SentStack}
+        options={{
+          tabBarLabel: 'Sent',
+          tabBarIcon: ({ color }) => (
+            <MaterialCommunityIcons name="note" color={color} size={26} />
+          ),
+        }}
+      />
+	  <Tab.Screen
+        name="MoreStack"
+        component={MoreStack}
+        options={{
+          tabBarLabel: 'More',
           tabBarIcon: ({ color }) => (
             <MaterialCommunityIcons name="note" color={color} size={26} />
           ),

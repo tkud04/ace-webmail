@@ -2,9 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Platform, StyleSheet, View, Text, Pressable, FlatList, SafeAreaView, StatusBar } from 'react-native';
 
 import * as helpers from '../Helpers';
-
- import ListItem from '../components/ListItem.js';
-
+import ListItem from '../components/ListItem.js';
+ 
  const renderItem = ({ item }) => {
    // const backgroundColor = item.id === selectedId ? "#6e3b6e" : "#f9c2ff";
   //  const color = item.id === selectedId ? 'white' : 'black';
@@ -19,7 +18,7 @@ import * as helpers from '../Helpers';
     );
   };
 
-function InboxScreen(){
+function MoreScreen(){
 	
 	const [inbox, setInbox] = useState(helpers.getInbox());
    
@@ -36,7 +35,6 @@ function InboxScreen(){
   
 	return (
 	   <View style={styles.container}>
-	  
 	     <FlatList
            data={inbox}
            renderItem={renderItem}
@@ -59,4 +57,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default InboxScreen;
+export default MoreScreen;

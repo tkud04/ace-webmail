@@ -1,5 +1,5 @@
 import React from 'react';
-import {StatusBar, StyleSheet, Pressable, View, Text, Image } from 'react-native';
+import {StatusBar, StyleSheet, Dimensions, Pressable, View, Text, Image } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const newButtonClick = () => {
@@ -39,8 +39,7 @@ const HeaderBar = () => {
 	 <View style={styles.container}>
 	  <IconButton name='plus' bgcolor='#694fad' action={newButtonClick} style={styles.newButton}/>
 	  <View style={styles.logoView}>
-	  <Image source={require('../assets/logo.png')}  style={{ width: 60, height: 60 }}/>
-	  <Text style={styles.logoText}>Webmail</Text>
+	  <Image source={require('../assets/logo.png')}  style={{ width: 50, height: 50 }}/>
 	  </View>
 	  <IconButton name='account'  bgcolor='#694fad' action={profileButtonClick} style={styles.profileButton}/>
      </View>	
@@ -50,13 +49,12 @@ const HeaderBar = () => {
 const styles = StyleSheet.create({
 
   container: {
-	  flex: 1,
+	   width: Dimensions.get('window').width,
 	flexDirection: 'row',
 	justifyContent: 'space-between',
 	borderBottomWidth:0.8,
   },
   hc: {
-	  width: 80,
 	  height: 20,
 	  overflow: 'hidden',
 	  padding: 20
