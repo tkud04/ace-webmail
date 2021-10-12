@@ -10,9 +10,10 @@ function LoginScreen(){
 	const [u, setU] = useState("");
 	const [p, setP] = useState("");
 	const [validation, setValidation] = useState(false);
+	const [badLogin, setBadLogin] = useState(false);
 	
-	const login = async () => {
-	console.log("[u,p]: ",[u,p]);
+	const login = async (cb) => {
+//	console.log("[u,p]: ",[u,p]);
 	if(u != "" || p != ""){
 	try {
 		   let fd = new FormData();
@@ -31,14 +32,29 @@ function LoginScreen(){
         },
         body: fd
        });
-      const dt = await response.text();
+      const dt = await response.json();
       console.log("dt: ",dt);
+	  
+	  if(dt.status == "ok"){
+		  let tk = dt.tk;
+		  helpers.save('ace_tk',tk);
+		  //setTk(ttk);
+		  //setIsLoggedIn(true);
+
+	  }
+	  else{
+		  setBadLogin(true);
+	  }
+	  
+	  cb();
     } catch (error) {
       console.error(error);
+	  cb();
     }
     }
 	else{
 		setValidation(true);
+		cb();
 	}
 }
 
@@ -66,6 +82,7 @@ function LoginScreen(){
 		  </View>
 		  
 		  {validation && <Text style={styles.validation}>Please fill in the required fields and try again</Text>}
+		  {badLogin && <Text style={styles.validation}>Invalid login details. Please try again</Text>}
 		  
 		   <AwesomeButton
 		      type="round"
@@ -78,9 +95,8 @@ function LoginScreen(){
              onPress={next => {
               /** Do Something **/
 			  setValidation(false);
-			  login();
 			  console.log("moving..");
-              next();
+			  login(next);
              }}
     >
       Submit
