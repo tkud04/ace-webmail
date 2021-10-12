@@ -39,7 +39,7 @@ const HeaderBar = () => {
 	 <View style={styles.container}>
 	  <IconButton name='plus' bgcolor='#694fad' action={newButtonClick} style={styles.newButton}/>
 	  <View style={styles.logoView}>
-	  <Image source={require('../assets/logo.png')}  style={{ width: 50, height: 50 }}/>
+	  <Image source={require('../assets/logo.png')}  style={{ width: 60, height: 60 }}/>
 	  </View>
 	  <IconButton name='account'  bgcolor='#694fad' action={profileButtonClick} style={styles.profileButton}/>
      </View>	
@@ -53,6 +53,7 @@ const styles = StyleSheet.create({
 	flexDirection: 'row',
 	justifyContent: 'space-between',
 	borderBottomWidth:0.8,
+	marginLeft: -15
   },
   hc: {
 	  height: 20,
@@ -60,10 +61,10 @@ const styles = StyleSheet.create({
 	  padding: 20
   },
   newButton: {
-	  alignItems: 'flex-start',
+	
   },
   profileButton: {
-	  alignItems: 'flex-end',
+	 
   }, 
   logoView: {
 	 

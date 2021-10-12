@@ -1,4 +1,7 @@
-import { Text, Linking, AsyncStorage} from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { Platform, StyleSheet, View, Text} from 'react-native';
+import * as SecureStore from 'expo-secure-store';
+
 //import RNPaystack from 'react-native-paystack';
 //import {showMessage, hideMessage} from 'react-native-flash-message';
  
@@ -18,6 +21,21 @@ export function tryParseJSON(jsonString){
 
     return false;
 }
+
+export async function save(key, value) {
+  await SecureStore.setItemAsync(key, value);
+}
+
+export async function getValueFor(key) {
+  let result = await SecureStore.getItemAsync(key), ret = null;
+  if (result) {
+    ret = result;
+  } else {
+    //alert('No values stored under that key.');
+  }
+  return ret;
+}
+
 
 export function getInbox(){
 	

@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Platform, StyleSheet, View, Text, Pressable, FlatList, SafeAreaView, StatusBar } from 'react-native';
+import { Platform, StyleSheet, ActivityIndicator, View, Text, Pressable, FlatList, SafeAreaView, StatusBar } from 'react-native';
 
 import * as helpers from '../Helpers';
 
  import ListItem from '../components/ListItem.js';
+
+
 
  const renderItem = ({ item }) => {
    // const backgroundColor = item.id === selectedId ? "#6e3b6e" : "#f9c2ff";
@@ -20,10 +22,10 @@ import * as helpers from '../Helpers';
   };
 
 function InboxScreen(){
-	
-	const [inbox, setInbox] = useState(helpers.getInbox());
-   
 
+   const [isLoading, setLoading] = useState(true);
+   const [inbox, setInbox] = useState(helpers.getInbox());
+   
   // Similar to componentDidMount and componentDidUpdate:
   useEffect(() => {
     // Fetch inbox if possible
