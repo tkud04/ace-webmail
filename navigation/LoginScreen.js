@@ -39,6 +39,7 @@ function LoginScreen(){
 	  if(dt.status == "ok"){
 		  let tk = dt.tk;
 		  helpers.save('ace_tk',tk);
+		  helpers.save('ace_u',u);
 		  ctx.setTk(tk);
 		  ctx.setU(u);
 		  ctx.setLoggedIn(true);
@@ -68,7 +69,7 @@ function LoginScreen(){
 		   <Text>Username:</Text>
 		    <TextInput
               style={styles.ti}
-              onChangeText={t => {console.log("u: ",t); setU(t)}}
+              onChangeText={t => {setU(t)}}
               placeholder="Your username or email address"
             />
 		  </View>

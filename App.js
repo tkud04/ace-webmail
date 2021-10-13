@@ -1,6 +1,6 @@
 import 'react-native-gesture-handler';
 import { StatusBar } from 'expo-status-bar';
-import React, { useState, useEffect, useCallback, useContext } from 'react';
+import React, { useState, useEffect, useRef, useContext } from 'react';
 import { Platform, StyleSheet, View, Text } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
@@ -17,17 +17,58 @@ import DraftsStack from './navigation/DraftsStack';
 import SentStack from './navigation/SentStack';
 import MoreStack from './navigation/MoreStack';
 
-
-
+import * as Notifications from 'expo-notifications';
 import * as helpers from './Helpers';
 
 const Tab = createMaterialBottomTabNavigator();
+
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: false,
+    shouldSetBadge: false,
+  }),
+});
+
 
 export default function App() {
 	const [isAppReady, setIsAppReady] = useState(false);
 	const [loggedIn, setLoggedIn] = useState(false);
 	const [tk, setTk] = useState(null);
 	const [u, setU] = useState(null);
+	
+	const [etk, setEtk] = useState('');
+  const [notification, setNotification] = useState(false);
+  const notificationListener = useRef();
+  const responseListener = useRef();
+  
+  const updateEtk = async (etk) => {
+	
+	try {
+		   let fd = new FormData();
+		 fd.append("u",u);
+		 fd.append("tk",tk);
+		 fd.append("etk",etk);
+		 console.log("[u,tk,etk]: ",[u,tk,etk]);
+	//create request
+	let url = `${helpers.API}/update-session`;
+	const req = new Request(url,{method: 'POST', body: fd});
+      const response = await fetch(url, 
+	  {
+        method: 'POST',
+
+		headers: {
+         'Content-Type': 'multipart/form-data'
+        },
+        body: fd
+       });
+      const dt = await response.text();
+      console.log("dt: ",dt);
+    } catch (error) {
+      console.error(error);
+    }
+}
+  
 	let ctx = {
 				loggedIn: loggedIn,
 				setLoggedIn: setLoggedIn,
@@ -43,13 +84,14 @@ export default function App() {
         //make any API calls you need to do here
         //await Font.loadAsync(Entypo.font);
 		let ttk = await helpers.getValueFor("ace_tk");
-		console.log("ttk: ",ttk);
+		let uu = await helpers.getValueFor("ace_u");
 		
 		
-		if(tk != null){
+		
+		if(ttk != null && uu != null){
 			setTk(ttk);
-		    setIsLoggedIn(true);
-			
+			 setU(uu);
+		    setLoggedIn(true);
 		}
 		
         // Artificially delay for two seconds to simulate a slow loading
@@ -64,6 +106,23 @@ export default function App() {
     }
 
     prepare();
+  }, []);
+  
+  useEffect(() => {
+    helpers.registerForPushNotificationsAsync().then(token => {helpers.save('ace_etk',token); updateEtk(token)});
+
+    notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
+      setNotification(notification);
+    });
+
+    responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
+      console.log(response);
+    });
+
+    return () => {
+      Notifications.removeNotificationSubscription(notificationListener.current);
+      Notifications.removeNotificationSubscription(responseListener.current);
+    };
   }, []);
   
 
@@ -155,3 +214,4 @@ const styles = StyleSheet.create({
     opacity: 0
   },
 });
+
