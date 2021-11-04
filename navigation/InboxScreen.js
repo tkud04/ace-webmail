@@ -64,7 +64,7 @@ function InboxScreen(){
 	     <FlatList
            data={inbox}
            renderItem={renderItem}
-           keyExtractor={(item) => item.id}
+           keyExtractor={(item) => `msg-${item.id}`}
          />
 	   </View>
 	);

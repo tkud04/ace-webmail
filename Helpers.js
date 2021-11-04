@@ -119,12 +119,7 @@ try {
 		let dtt = dt.data;
 		for(let i = 0; i < dtt.length; i++){
 			let ii = dtt[i];
-			ret.push({
-				id: ii.id,
-                from: `${ii.sn}`,
-                subject: ii.subject,
-                msg: ii.excerpt,
-			});
+			ret.push(ii);
 		}
 	  }
     } catch (error) {

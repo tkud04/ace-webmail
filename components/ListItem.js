@@ -20,7 +20,7 @@ const ItemAvatar = (props) => {
 const ItemCaption = (props) => {
 	return (
 	 <View style={styles.caption}>
-	  <Text style={styles.from}>{props.from}</Text>
+	  <Text style={[styles.from,props.status == "unread" ? styles.unread : null]}>{props.from}</Text>
 	  <Text style={styles.subject}>{props.subject}</Text>
 	  <Text style={styles.extract}>{props.extract.substr(0,20)}</Text>
 	  </View>
@@ -43,8 +43,8 @@ const ListItem = (props) => {
         ]}
 	 >
 	 <View style={styles.item}>
-	  <ItemAvatar letter={getLetter(i.from)}/>
-	  <ItemCaption from={i.from} subject={i.subject} extract={i.msg}/>
+	  <ItemAvatar letter={getLetter(i.sn)}/>
+	  <ItemCaption from={i.sn} subject={i.subject} extract={i.excerpt} status={i.status}/>
      </View>	
 	 </Pressable>
 	);
@@ -62,6 +62,7 @@ const styles = StyleSheet.create({
   },
   caption: {
 	  padding: 5,
+	   flex: 5,
 	  width: 100,
   },
   avatar: {
@@ -80,7 +81,9 @@ const styles = StyleSheet.create({
   },
   from: {  
 	  color: '#000',
-	  fontWeight: 'bold'
+	  fontWeight: 'bold',
+	  width: 150,
+	  marginBottom: 5
   },
   subject: {
 	  color: '#000',
@@ -88,6 +91,12 @@ const styles = StyleSheet.create({
   },
   extract: {
 	  color: '#000'
+  },
+  unread: {
+	  padding: 5,
+	  color: '#fff',
+	  overflow: 'hidden',
+	  backgroundColor: '#34fa33'
   },
 });
 
