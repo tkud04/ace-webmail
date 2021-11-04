@@ -80,27 +80,57 @@ let ret = [
   {
     id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
     from: 'First Item',
-    subject: 'First Item updated',
-    msg: 'First Item updated',
+    subject: 'First Item',
+    msg: 'First Item',
   },
   {
     id: 'bd7asdfea-c1b6-46c2-aed5-3ad53abb28ba',
     from: 'Second Item',
-    subject: 'Second Item updated',
-    msg: 'Second Item updated',
+    subject: 'Second Item',
+    msg: 'Second Item',
   },{
     id: 'bd7acmkea-s2b1-46c2-aed5-3ad53abb28ba',
     from: 'Third Item',
-    subject: 'Third Item updated',
-    msg: 'Third Item updated',
+    subject: 'Third Item',
+    msg: 'Third Item',
   },{
     id: 'bdbzcbea-x36y-46c2-aed5-3ad53abb28ba',
     from: 'Fourth Item',
-    subject: 'Fourth Item updated',
-    msg: 'Fourth Item updated',
+    subject: 'Fourth Item',
+    msg: 'Fourth Item',
   },
 ];
 
+return ret;
+}
+
+export async function fetchMessages(dt){
+	
+let ret = [], url = `${API}/messages?u=${dt.u}&tk=${dt.tk}&l=${dt.l}`;;
+//console.log("url: ",url);
+try {
+		
+	//create request
+	const req = new Request(url);
+      const response = await fetch(url);
+      const dt = await response.json();
+	  
+	  if(dt.status == "ok"){
+		let dtt = dt.data;
+		for(let i = 0; i < dtt.length; i++){
+			let ii = dtt[i];
+			ret.push({
+				id: ii.id,
+                from: `${ii.sn}`,
+                subject: ii.subject,
+                msg: ii.excerpt,
+			});
+		}
+	  }
+    } catch (error) {
+      console.error(error);
+    }
+//console.log("ret: ",ret);
 return ret;
 }
 

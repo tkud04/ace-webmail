@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Platform, StyleSheet, ActivityIndicator, View, Text, Pressable, FlatList, SafeAreaView, StatusBar } from 'react-native';
 
 import * as helpers from '../Helpers';
 
  import ListItem from '../components/ListItem.js';
-
+import  UserContext from '../UserContext';
 
 
  const renderItem = ({ item }) => {
@@ -24,16 +24,38 @@ import * as helpers from '../Helpers';
 function InboxScreen(){
 
    const [isLoading, setLoading] = useState(true);
-   const [inbox, setInbox] = useState(helpers.getInbox());
+   const [inbox, setInbox] = useState([]);
+   const [reload, setReload] = useState(false);
+   const uc = useContext(UserContext);
    
   // Similar to componentDidMount and componentDidUpdate:
   useEffect(() => {
+	  //console.log('uc: ',uc);
     // Fetch inbox if possible
-	setInterval(() => {
 	//console.log(`fetching new mail..`);
-    let fi = helpers.fetchInbox();
-	//console.log('fi: ',fi);
-	},5000);
+	if(isLoading){
+    let fi = helpers.fetchMessages({u: uc.u, tk: uc.tk, l: "inbox"});
+	fi.then(d => {
+		//console.log("d: ",d);
+		setInbox(d);
+		setLoading(false);
+		})
+	  .catch(e => console.log(e));
+	}
+  });
+  
+  useEffect(() => {
+	  //console.log('uc: ',uc);
+    // Fetch inbox if possible
+	//console.log(`fetching new mail..`);
+	if(reload){
+    let fi = helpers.fetchMessages({u: uc.u, tk: uc.tk, l: "inbox"});
+	fi.then(d => {
+		setInbox(d);
+		setReload(false);
+		})
+	  .catch(e => console.log(e));
+	}
   });
   
 	return (
