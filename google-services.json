@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1085105625655",
+    "project_id": "ace-webmail",
+    "storage_bucket": "ace-webmail.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1085105625655:android:20c7b3b805a264f3cf3db2",
+        "android_client_info": {
+          "package_name": "com.aceluxurystore.mail"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1085105625655-0uud4dpuo4jaeiu5cafh28bdt3bibm76.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA4G1RgtgkAHGCg7TfXwmE_nUy7S_1soH8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1085105625655-0uud4dpuo4jaeiu5cafh28bdt3bibm76.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
