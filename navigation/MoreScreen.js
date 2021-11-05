@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { Platform, StyleSheet, View, Modal, Text, Pressable, Dimensions,StatusBar } from 'react-native';
 import AwesomeButton from "react-native-really-awesome-button";
 import * as helpers from '../Helpers';
-import UserContext from '../UserContext';
+ import  UserContext from '../contexts/UserContext';
 
 
 function MoreScreen(){

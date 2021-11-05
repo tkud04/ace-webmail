@@ -1,8 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Platform, StyleSheet, View, Text, Pressable, FlatList, SafeAreaView, StatusBar } from 'react-native';
 
 import * as helpers from '../Helpers';
-import ListItem from '../components/ListItem.js';
+
+ import ListItem from '../components/ListItem.js';
+import  UserContext from '../contexts/UserContext';
  
  const renderItem = ({ item }) => {
    // const backgroundColor = item.id === selectedId ? "#6e3b6e" : "#f9c2ff";
@@ -19,27 +21,56 @@ import ListItem from '../components/ListItem.js';
   };
 
 function SentScreen(){
-	
-	const [inbox, setInbox] = useState(helpers.getInbox());
-   
 
+   const [isLoading, setLoading] = useState(true);
+   const [sent, setSent] = useState([]);
+   const [reload, setReload] = useState(false);
+   const uc = useContext(UserContext);
+   
   // Similar to componentDidMount and componentDidUpdate:
   useEffect(() => {
-    // Fetch inbox if possible
-	setInterval(() => {
+	  //console.log('uc: ',uc);
+    // Fetch sent if possible
 	//console.log(`fetching new mail..`);
-    let fi = helpers.fetchInbox();
-	//console.log('fi: ',fi);
-	},5000);
+	if(isLoading){
+    let fi = helpers.fetchMessages({u: uc.u, tk: uc.tk, l: "sent"});
+	fi.then(d => {
+		//console.log("d: ",d);
+		setSent(d);
+		setLoading(false);
+		})
+	  .catch(e => console.log(e));
+	}
+  });
+  
+  useEffect(() => {
+	  //console.log('uc: ',uc);
+    // Fetch sent if possible
+	//console.log(`fetching new mail..`);
+	if(reload){
+    let fi = helpers.fetchMessages({u: uc.u, tk: uc.tk, l: "sent"});
+	fi.then(d => {
+		setSent(d);
+		setReload(false);
+		})
+	  .catch(e => console.log(e));
+	}
   });
   
 	return (
 	   <View style={styles.container}>
+		   {
+		   sent.length > 0 ?
 	     <FlatList
-           data={inbox}
+           data={sent}
            renderItem={renderItem}
-           keyExtractor={(item) => item.id}
+           keyExtractor={(item) => `msg-${item.id}`}
          />
+		 :
+		 <View style={styles.empty}>
+		   <Text style={styles.emptyText}>Messages in your Sent folder will be displayed here</Text>
+		 </View>
+		   }
 	   </View>
 	);
 }
@@ -54,7 +85,15 @@ const styles = StyleSheet.create({
   },
   listButton: {
 	  
-  }
+  },
+  empty: {
+	  padding: 5, 
+	  alignItems: 'center'
+  },
+  emptyText: {
+	  color: '#f00',
+      fontSize: 15
+  },
 });
 
 export default SentScreen;

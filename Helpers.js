@@ -129,6 +129,7 @@ try {
 return ret;
 }
 
+
 export function serializeJSON(data) {
   return Object.keys(data).map(function (keyName) {
     return encodeURIComponent(keyName) + '=' + encodeURIComponent(data[keyName])
@@ -175,4 +176,9 @@ export async function registerForPushNotificationsAsync() {
   }
 
   return token;
+}
+
+export function findItem(l,x){
+	console.log("[l,x]: ",[l,x]);
+	return l.find(i => i.id == x);
 }

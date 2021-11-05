@@ -4,22 +4,13 @@ import { Platform, StyleSheet, ActivityIndicator, View, Text, Pressable, FlatLis
 import * as helpers from '../Helpers';
 
  import ListItem from '../components/ListItem.js';
-import  UserContext from '../UserContext';
+ import Checkbox from '../components/Checkbox.js';
 
-
- const renderItem = ({ item }) => {
-   // const backgroundColor = item.id === selectedId ? "#6e3b6e" : "#f9c2ff";
-  //  const color = item.id === selectedId ? 'white' : 'black';
-
-    return (
-	 
-      <ListItem
-        item={item}
-        backgroundColor="#6e3b6e"
-      />
-	 
-    );
-  };
+ import  UserContext from '../contexts/UserContext';
+ 
+ 
+ import  SelectedInboxContext from '../contexts/SelectedInboxContext';
+ import { SelectedInboxProvider } from '../contexts/SelectedInboxContext';
 
 function InboxScreen(){
 
@@ -27,6 +18,31 @@ function InboxScreen(){
    const [inbox, setInbox] = useState([]);
    const [reload, setReload] = useState(false);
    const uc = useContext(UserContext);
+
+
+    const renderItem = ({ item }) => {
+   // const backgroundColor = item.id === selectedId ? "#6e3b6e" : "#f9c2ff";
+  //  const color = item.id === selectedId ? 'white' : 'black';
+   
+    return (
+	 
+	  <View >
+	    
+        <ListItem
+          item={item}
+          backgroundColor="#6e3b6e"
+		  cc={
+			  <View style={{marginRight: 5, marginTop: 5,alignItems: "flex-end"}}>
+               <Checkbox id={item.id}/>
+              </View>  
+		  }
+        />
+		
+	 </View>
+	 
+    );
+  };
+   
    
   // Similar to componentDidMount and componentDidUpdate:
   useEffect(() => {
@@ -57,18 +73,35 @@ function InboxScreen(){
 	  .catch(e => console.log(e));
 	}
   });
+
+  useEffect(() => {
+	  let l = [];
+	for(let i = 0; i < inbox.length; i++){
+      let ii = inbox[i];
+	  l.push({id:ii.id,selected: false});
+	}
+	helpers.save('selected_inbox',JSON.stringify(l));
+  });
+  
   
 	return (
 	   <View style={styles.container}>
-	  
+		   {
+		   inbox.length > 0 ?
 	     <FlatList
            data={inbox}
            renderItem={renderItem}
            keyExtractor={(item) => `msg-${item.id}`}
          />
+		 :
+		 <View style={styles.empty}>
+		   <Text style={styles.emptyText}>Messages in your inbox will be displayed here</Text>
+		 </View>
+		   }
 	   </View>
 	);
 }
+
 
 const styles = StyleSheet.create({
   container: {
@@ -80,7 +113,15 @@ const styles = StyleSheet.create({
   },
   listButton: {
 	  
-  }
+  },
+  empty: {
+	  padding: 5, 
+	  alignItems: 'center'
+  },
+  emptyText: {
+	  color: '#f00',
+      fontSize: 15
+  },
 });
 
 export default InboxScreen;

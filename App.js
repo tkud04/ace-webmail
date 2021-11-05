@@ -9,7 +9,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 
 
 import SplashScreen from './components/SplashScreen.js';
-import { UserProvider } from './UserContext';
+import { UserProvider } from './contexts/UserContext';
 
 import AuthStack from './navigation/AuthStack';
 import InboxStack from './navigation/InboxStack';

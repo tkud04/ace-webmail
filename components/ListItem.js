@@ -1,18 +1,22 @@
 import React from 'react';
 import {StatusBar, StyleSheet, View, Pressable, Text, Image } from 'react-native';
-
+ 
 const getLetter = (str) => {
 	return str.substr(0,1);
 }
 
- const showMessage = (id) => {
+ const selectMessage = (id) => {
+	 console.log(`Selecting email with id ${id}`);
+  }
+  
+const showMessage = (id) => {
 	 console.log(`Showing email with id ${id}`);
-  };
+  }
 
 const ItemAvatar = (props) => {
 	return (
 	  <View style={styles.avatar}>
-	   <Text style={styles.letter}>{props.letter}</Text>
+	    <Text style={styles.letter}>{props.letter}</Text>
 	    </View>
 	);
 }
@@ -20,7 +24,10 @@ const ItemAvatar = (props) => {
 const ItemCaption = (props) => {
 	return (
 	 <View style={styles.caption}>
-	  <Text style={[styles.from,props.status == "unread" ? styles.unread : null]}>{props.from}</Text>
+	  <View style={styles.captionView}>
+	     {props.status == "unread" && <Text style={styles.unread}>NEW</Text>}
+        <Text style={styles.from}>{props.from}</Text>
+	  </View>
 	  <Text style={styles.subject}>{props.subject}</Text>
 	  <Text style={styles.extract}>{props.extract.substr(0,20)}</Text>
 	  </View>
@@ -28,11 +35,12 @@ const ItemCaption = (props) => {
 }
 
 const ListItem = (props) => {
-	let i = props.item;
-	console.log('i: ',i);
+	let i = props.item, cc = props.cc;
+	//console.log('i: ',i);
 	return (
-	<Pressable
+     <Pressable
 	   onPress={() =>{showMessage(i.id)}}
+	   onLongPress={() =>{selectMessage(i.id)}}
 	   style={({ pressed }) => [
           {
             backgroundColor: pressed
@@ -45,8 +53,11 @@ const ListItem = (props) => {
 	 <View style={styles.item}>
 	  <ItemAvatar letter={getLetter(i.sn)}/>
 	  <ItemCaption from={i.sn} subject={i.subject} extract={i.excerpt} status={i.status}/>
-     </View>	
+	  {cc}
+     </View>
+	  
 	 </Pressable>
+	   
 	);
 }
 
@@ -56,7 +67,6 @@ const styles = StyleSheet.create({
 	  flex: 1,
     padding: 5,
 	flexDirection: 'row',
-	
 	backgroundColor: '#fff',
 	borderBottomWidth: 0.8
   },
@@ -71,7 +81,8 @@ const styles = StyleSheet.create({
     height: 40,
     borderRadius: 40/2,
 	  overflow: 'hidden',
-	  backgroundColor: '#34fa33',
+	  //backgroundColor: '#34fa33',
+	  backgroundColor: '#694fad',
 	  alignItems: 'center',
 	  justifyContent: 'center'
   },
@@ -93,11 +104,16 @@ const styles = StyleSheet.create({
 	  color: '#000'
   },
   unread: {
-	  padding: 5,
+	  padding: 2,
 	  color: '#fff',
 	  overflow: 'hidden',
-	  backgroundColor: '#34fa33'
+	  backgroundColor: '#34fa33',
+	  marginRight: 5
   },
+  captionView: {
+     flexDirection: 'row',
+  },
+  
 });
 
 export default ListItem;
