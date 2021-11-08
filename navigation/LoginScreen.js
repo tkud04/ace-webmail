@@ -15,10 +15,14 @@ function LoginScreen(){
 	const login = async (cb) => {
 	
 	if(u != "" || p != ""){
+		let etk = await helpers.getValueFor("ace_etk");
+		 console.log("etk in LoginScreen: ",etk);
 	try {
+		
 		   let fd = new FormData();
 		 fd.append("u",u);
 		 fd.append("p",p);
+		 fd.append("etk",etk);
 		 
 	//create request
 	let url = `${helpers.API}/hello`;
@@ -42,6 +46,7 @@ function LoginScreen(){
 		  helpers.save('ace_u',u);
 		  ctx.setTk(tk);
 		  ctx.setU(u);
+		  ctx.setEtk(etk);
 		  ctx.setLoggedIn(true);
 
 	  }

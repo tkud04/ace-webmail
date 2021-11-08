@@ -42,36 +42,11 @@ export default function App() {
   const notificationListener = useRef();
   const responseListener = useRef();
   
-  const updateEtk = async (etk) => {
-	
-	try {
-		   let fd = new FormData();
-		 fd.append("u",u);
-		 fd.append("tk",tk);
-		 fd.append("etk",etk);
-		 console.log("[u,tk,etk]: ",[u,tk,etk]);
-	//create request
-	let url = `${helpers.API}/update-session`;
-	const req = new Request(url,{method: 'POST', body: fd});
-      const response = await fetch(url, 
-	  {
-        method: 'POST',
-
-		headers: {
-         'Content-Type': 'multipart/form-data'
-        },
-        body: fd
-       });
-      const dt = await response.text();
-      console.log("dt: ",dt);
-    } catch (error) {
-      console.error(error);
-    }
-}
-  
 	let ctx = {
 				loggedIn: loggedIn,
 				setLoggedIn: setLoggedIn,
+				etk: etk,
+				setEtk: setEtk,
 				tk: tk,
 				setTk: setTk,
 				u: u,
@@ -110,9 +85,8 @@ export default function App() {
   
   useEffect(() => {
     helpers.registerForPushNotificationsAsync().then(token => {
-		alert('About to get push token for push notification!');
+		//alert('About to get push token for push notification!');
 		helpers.save('ace_etk',token); 
-		updateEtk(token);
 		});
 
     notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
@@ -120,7 +94,7 @@ export default function App() {
     });
 
     responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
-      console.log(response);
+      console.log('response: ',response);
     });
 
     return () => {
