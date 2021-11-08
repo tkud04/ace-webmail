@@ -109,7 +109,11 @@ export default function App() {
   }, []);
   
   useEffect(() => {
-    helpers.registerForPushNotificationsAsync().then(token => {helpers.save('ace_etk',token); updateEtk(token)});
+    helpers.registerForPushNotificationsAsync().then(token => {
+		alert('About to get push token for push notification!');
+		helpers.save('ace_etk',token); 
+		updateEtk(token);
+		});
 
     notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
       setNotification(notification);
