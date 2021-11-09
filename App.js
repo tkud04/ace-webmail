@@ -87,6 +87,7 @@ export default function App() {
     helpers.registerForPushNotificationsAsync().then(token => {
 		//alert('About to get push token for push notification!');
 		helpers.save('ace_etk',token); 
+		alert(`etk in registerForPushNotificationsAsync: ${token}`);
 		});
 
     notificationListener.current = Notifications.addNotificationReceivedListener(notification => {

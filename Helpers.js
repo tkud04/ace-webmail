@@ -148,19 +148,30 @@ export async function schedulePushNotification() {
 }
 
 export async function registerForPushNotificationsAsync() {
-  let token;
-  if (Constants.isDevice) {
+  let token = null, cid = Constants.isDevice;
+
+  if (cid) {
     const { status: existingStatus } = await Notifications.getPermissionsAsync();
     let finalStatus = existingStatus;
+
     if (existingStatus !== 'granted') {
       const { status } = await Notifications.requestPermissionsAsync();
       finalStatus = status;
     }
-    if (finalStatus !== 'granted') {
-      alert('Failed to get push token for push notification!');
-      return;
+		  // alert(`In registerForPushNotificationsAsync(), finalStatus = ${finalStatus}`);
+    if (finalStatus == 'granted') {
+      Notifications.getExpoPushTokenAsync()
+	  .then(data => {
+		  alert(`In getExpoPushTokenAsync(), data = ${data}`);
+	  })
+	  .catch(err => {
+		  alert(`In getExpoPushTokenAsync(), err = ${err}`);
+	  });
     }
-    token = (await Notifications.getExpoPushTokenAsync()).data;
+	else {
+		alert('Failed to get push token for push notification!');
+	}
+    
     //console.log(token);
   } else {
     alert('Must use physical device for Push Notifications');
@@ -174,7 +185,8 @@ export async function registerForPushNotificationsAsync() {
       lightColor: '#FF231F7C',
     });
   }
-
+  
+  alert(`In registerForPushNotificationsAsync(), token: ${token}`);
   return token;
 }
 

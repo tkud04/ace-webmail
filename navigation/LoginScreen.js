@@ -16,7 +16,8 @@ function LoginScreen(){
 	
 	if(u != "" || p != ""){
 		let etk = await helpers.getValueFor("ace_etk");
-		 console.log("etk in LoginScreen: ",etk);
+		 //console.log("etk in LoginScreen: ",etk);
+		 
 	try {
 		
 		   let fd = new FormData();
