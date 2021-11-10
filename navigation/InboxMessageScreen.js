@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Platform, StyleSheet, ActivityIndicator, View, Text, Pressable, FlatList, SafeAreaView, StatusBar } from 'react-native';
-
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import * as helpers from '../Helpers';
 
  import ListItem from '../components/ListItem.js';
@@ -13,14 +13,29 @@ import * as helpers from '../Helpers';
 function InboxMessageScreen({route,navigation}){
 
    const [isLoading, setLoading] = useState(false);
+   const [showMore, setShowMore] = useState(false);
+   const [showMoreIcon, setShowMoreIcon] = useState("arrow-down-drop-circle");
    const uc = useContext(UserContext);
   const { item } = route.params;
    
+   const ItemAvatar = (props) => {
+	return (
+	  <View style={styles.avatar}>
+	    <Text style={styles.letter}>{props.letter}</Text>
+	    </View>
+	);
+}
+
+const toggleShowMore = () => {
+	let ss = !showMore, ssi = ss ? "arrow-up-bold-circle" : "arrow-down-drop-circle" ;
+	setShowMore(ss);
+	setShowMoreIcon(ssi);
+}
    
   // Similar to componentDidMount and componentDidUpdate:
   useEffect(() => {
 	  console.log('item: ',item);
-    // Fetch inbox if possible
+    // Fetch message if possible
 	//console.log(`fetching new mail..`);
 	if(isLoading){
     
@@ -30,10 +45,44 @@ function InboxMessageScreen({route,navigation}){
 
   
 	return (
-	   <View style={styles.container}>   
-		 <View style={styles.empty}>
+	   <View style={styles.container}> 
+		   {
+			   isLoading ? (
+		 <View style={[styles.empty,{alignItems: 'center'}]}>
 		   <Text style={styles.emptyText}>Your message will be displayed here</Text>
 		 </View>
+		 ) : (
+		 <View style={styles.empty}>
+		   <View style={{flexDirection: 'row',marginBottom: 10}}>
+		     <Text style={styles.subject}>{item.subject}</Text>
+		   </View>
+		   <View style={{flexDirection: 'row',marginBottom: 5}}>
+		     <ItemAvatar letter={item.sn.substr(0,1)}/>
+		     <View>
+		       <Text style={styles.sn}>{item.sn}</Text>
+		       <Text style={styles.sd}>{item.date}</Text>
+			   <View style={{flexDirection: 'row',marginBottom: 5}}>
+		         <Text style={styles.sd}>to me </Text>
+				 <Pressable
+	              onPress={toggleShowMore}
+	             >
+			       <MaterialCommunityIcons name={showMoreIcon} color="#555" size={20} style={{padding: 2}}/>
+				 </Pressable>
+		        </View>
+		     </View>
+		   </View>
+		   {
+			 showMore && (
+		   <View style={styles.showMore}>
+			    <Text style={[styles.sd,{marginBottom: 5}]}>From: {item.sn} | {item.sa}</Text>
+			    <Text style={[styles.sd,{marginBottom: 5}]}>To: {uc.u}@aceluxurystore.com</Text>
+			    <Text style={styles.sd}>Date: {item.date}</Text>
+		   </View>
+		   )
+		   }
+		 </View>
+		   )
+		   }
 	   </View>
 	);
 }
@@ -51,12 +100,42 @@ const styles = StyleSheet.create({
 	  
   },
   empty: {
-	  padding: 5, 
-	  alignItems: 'center'
+	  padding: 5 
   },
   emptyText: {
 	  color: '#f00',
       fontSize: 15
+  },
+  subject: {
+      fontSize: 20
+  },
+    avatar: {
+	//  padding: 7,
+	marginRight: 5,
+     width: 50,
+    height: 50,
+    borderRadius: 50/2,
+	  overflow: 'hidden',
+	  //backgroundColor: '#34fa33',
+	  backgroundColor: '#694fad',
+	  alignItems: 'center',
+	  justifyContent: 'center'
+  },
+  letter: {
+	  color: '#fff',
+	  fontWeight: 'bold',
+	   fontSize: 20
+  },
+  sn: {
+  },
+  sd: {
+	  color: '#555',
+	  fontSize: 13
+  },
+  showMore: {
+	  borderWidth: 0.8,
+	  borderColor: '#777',
+	  padding: 5
   },
 });
 
