@@ -1,5 +1,6 @@
 import React from 'react';
 import {StatusBar, StyleSheet, View, Pressable, Text, Image } from 'react-native';
+ import { useNavigation } from '@react-navigation/native';
  
 const getLetter = (str) => {
 	return str.substr(0,1);
@@ -9,8 +10,9 @@ const getLetter = (str) => {
 	 console.log(`Selecting email with id ${id}`);
   }
   
-const showMessage = (id) => {
-	 console.log(`Showing email with id ${id}`);
+const showMessage = (item,n) => {
+	 console.log(`Showing email with id ${item.id}`);
+	 n.navigate('InboxMessage',{item: item});
   }
 
 const ItemAvatar = (props) => {
@@ -35,11 +37,12 @@ const ItemCaption = (props) => {
 }
 
 const ListItem = (props) => {
+	const navigation = useNavigation();
 	let i = props.item, cc = props.cc;
 	//console.log('i: ',i);
 	return (
      <Pressable
-	   onPress={() =>{showMessage(i.id)}}
+	   onPress={() =>{showMessage(i, navigation)}}
 	   onLongPress={() =>{selectMessage(i.id)}}
 	   style={({ pressed }) => [
           {

@@ -148,7 +148,7 @@ export async function schedulePushNotification() {
 }
 
 export async function registerForPushNotificationsAsync() {
-  let token = null, cid = Constants.isDevice;
+  let token = "", cid = Constants.isDevice;
 
   if (cid) {
     const { status: existingStatus } = await Notifications.getPermissionsAsync();
@@ -162,7 +162,10 @@ export async function registerForPushNotificationsAsync() {
     if (finalStatus == 'granted') {
       Notifications.getExpoPushTokenAsync()
 	  .then(data => {
-		  alert(`In getExpoPushTokenAsync(), data = ${data}`);
+		  //alert(`In getExpoPushTokenAsync(), data = ${data}`);
+		  console.log(` data: `,data);
+		  token = data.data;
+		  	save('ace_etk',token); 
 	  })
 	  .catch(err => {
 		  alert(`In getExpoPushTokenAsync(), err = ${err}`);

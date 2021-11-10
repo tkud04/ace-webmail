@@ -12,7 +12,7 @@ import * as helpers from '../Helpers';
  import  SelectedInboxContext from '../contexts/SelectedInboxContext';
  import { SelectedInboxProvider } from '../contexts/SelectedInboxContext';
 
-function InboxScreen(){
+function InboxScreen({ navigation }){
 
    const [isLoading, setLoading] = useState(true);
    const [inbox, setInbox] = useState([]);
