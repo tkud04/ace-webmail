@@ -14,7 +14,6 @@ function InboxMessageScreen({route,navigation}){
 
    const [isLoading, setLoading] = useState(false);
    const uc = useContext(UserContext);
-   console.log('route.params: ',route.params);
   const { item } = route.params;
    
    

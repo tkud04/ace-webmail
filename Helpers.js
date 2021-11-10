@@ -189,7 +189,7 @@ export async function registerForPushNotificationsAsync() {
     });
   }
   
-  alert(`In registerForPushNotificationsAsync(), token: ${token}`);
+  //alert(`In registerForPushNotificationsAsync(), token: ${token}`);
   return token;
 }
 
