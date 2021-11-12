@@ -1,14 +1,13 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { Platform, StyleSheet, ActivityIndicator, View, Text, Pressable, FlatList, SafeAreaView, StatusBar } from 'react-native';
+import { Platform, Dimensions, ScrollView, StyleSheet, ActivityIndicator, View, Text, Pressable, FlatList, SafeAreaView, StatusBar } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import {WebView} from 'react-native-webview';
 import * as helpers from '../Helpers';
 
  import ListItem from '../components/ListItem.js';
  import Checkbox from '../components/Checkbox.js';
 
  import  UserContext from '../contexts/UserContext';
- 
-
 
 function InboxMessageScreen({route,navigation}){
 
@@ -17,6 +16,10 @@ function InboxMessageScreen({route,navigation}){
    const [showMoreIcon, setShowMoreIcon] = useState("arrow-down-drop-circle");
    const uc = useContext(UserContext);
   const { item } = route.params;
+  let ic = helpers.wvParse(item.content);
+   helpers.save('ace_current_xf',`${item.id}`); 
+   helpers.save('ace_current_msg',JSON.stringify(item)); 
+  // console.log('ic: ',ic);
    
    const ItemAvatar = (props) => {
 	return (
@@ -45,7 +48,7 @@ const toggleShowMore = () => {
 
   
 	return (
-	   <View style={styles.container}> 
+	   <ScrollView style={styles.container}> 
 		   {
 			   isLoading ? (
 		 <View style={[styles.empty,{alignItems: 'center'}]}>
@@ -78,12 +81,19 @@ const toggleShowMore = () => {
 			    <Text style={[styles.sd,{marginBottom: 5}]}>To: {uc.u}@aceluxurystore.com</Text>
 			    <Text style={styles.sd}>Date: {item.date}</Text>
 		   </View>
-		   )
+		   )		   
 		   }
+		   <View style={styles.webview}>
+		   <WebView
+		    originWhitelist={['*']}
+		    source={{html: ic}}
+			textZoom={100}
+		   />
+		   </View>
 		 </View>
 		   )
 		   }
-	   </View>
+	   </ScrollView>
 	);
 }
 
@@ -137,6 +147,11 @@ const styles = StyleSheet.create({
 	  borderColor: '#777',
 	  padding: 5
   },
+  webview:{ 
+  padding: 5,
+  marginTop: 10,
+  height: Dimensions.get('window').height
+  }
 });
 
 export default InboxMessageScreen;

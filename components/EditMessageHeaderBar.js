@@ -24,14 +24,13 @@ const IconButton = (props) => {
 }
 
 
-const MessageHeaderBar = (props) => {
+const EditMessageHeaderBar = (props) => {
 	const n = useNavigation();
-	
+	//let xf = await getValueFor("ace_current_xf");
 	const menu = [
-	{id: 3, name: 'reply', title: 'Reply', bgcolor: '#694fad', action: () => helpers.reply(n), style: {marginRight:10}},
-	{id: 4, name: 'forward', title: 'Forward', bgcolor: '#694fad', action: helpers.forwardMessage, style: {marginRight:10}},
-	{id: 2, name: 'email', title: 'Mark unread', bgcolor: '#694fad', action: helpers.markMessageUnread, style: {marginRight:10}},
-	{id: 1, name: 'trash-can', title: 'Trash', bgcolor: '#694fad', action: helpers.deleteMessage},
+	{id: 3, name: 'attachment', title: 'Attach file', bgcolor: '#694fad', action: helpers.attachMessage, style: {marginRight:10}},
+	{id: 4, name: 'send', title: 'Send', bgcolor: '#694fad', action: helpers.forwardMessage, style: {marginRight:10}},
+	{id: 2, name: 'text-box-remove', title: 'Discard', bgcolor: '#694fad', action: helpers.markMessageUnread}
 	
 	];
 	return (
@@ -72,4 +71,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default MessageHeaderBar;
+export default EditMessageHeaderBar;

@@ -27,9 +27,7 @@ const IconButton = (props) => {
           styles.iconButton
         ]}
 	 >
-	 <View style={[styles.hc,props.style]}>
-	   <MaterialCommunityIcons name={props.name}  size={26} />
-	 </View>
+	  <MaterialCommunityIcons name={props.name}  size={26} style={[{padding: 15},props.style]}/>
       </Pressable>
 	);
 };

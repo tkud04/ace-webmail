@@ -18,7 +18,7 @@ function InboxScreen({ navigation }){
    const [inbox, setInbox] = useState([]);
    const [reload, setReload] = useState(false);
    const uc = useContext(UserContext);
-
+    helpers.save('ace_current_label',"inbox"); 
 
     const renderItem = ({ item }) => {
    // const backgroundColor = item.id === selectedId ? "#6e3b6e" : "#f9c2ff";

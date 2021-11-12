@@ -3,6 +3,7 @@ import { Platform, StyleSheet, View, Text} from 'react-native';
 import * as SecureStore from 'expo-secure-store';
 import * as Notifications from 'expo-notifications';
 import Constants from 'expo-constants';
+import { useNavigation } from '@react-navigation/native';
 
 //import RNPaystack from 'react-native-paystack';
 //import {showMessage, hideMessage} from 'react-native-flash-message';
@@ -196,4 +197,82 @@ export async function registerForPushNotificationsAsync() {
 export function findItem(l,x){
 	console.log("[l,x]: ",[l,x]);
 	return l.find(i => i.id == x);
+}
+
+export function wvParse(s){
+	 let r = "";
+	 const regex = /(html)|(device-width)/;
+	 let sr = s.search(regex);
+	   // console.log('sr: ',sr);
+	 if(sr == -1){
+		 r = `
+		 <html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+  </head>
+  <body style="max-width:100%; width:100%;background-color:white;">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1" />
+    <meta name="color-scheme" content="only" />
+	${s}
+	</body>
+	</html>
+		 `;
+	 }
+	 else{
+		 r = s;
+	 }
+	 return r;
+ }
+ 
+ export async function reply(n){
+    let msg = await getValueFor("ace_current_msg"), l = await getValueFor("ace_current_label");	 
+    n.navigate('InboxEditMessage',{op: "reply",l: l,msg: msg});
+ }
+ 
+ export async function deleteMessage(){
+	let xf = await getValueFor("ace_current_msg"), l = await getValueFor("ace_current_label");
+    console.log(`delete msg with label ${l}, id ${xf}`);
+}
+
+export async function markMessageUnread(){
+	let xf = await getValueFor("ace_current_msg"), l = await getValueFor("ace_current_label");
+	console.log(`mark msg with label ${l}, id ${xf} as unread`);
+}
+
+export async function replyMessage(){
+	let xf = await getValueFor("ace_current_msg"), l = await getValueFor("ace_current_label");
+	console.log(`reply msg with label ${l}, id ${xf}`);
+	/**
+	//create request
+	let url = `${API}/message`;
+	let fd = new FormData();
+	       fd.append("u",u);
+	       fd.append("tk","kt");
+	       fd.append("m",m);
+	       fd.append("xf","reply");
+	       fd.append("c",c);
+		   
+	const req = new Request(url,{method: 'POST', body: dt});
+	
+	//fetch request
+	fetch(req)
+	   .then(response => {
+		   if(response.status === 200){
+			   return response.json();
+		   }
+		   else{
+			   return {status: "error", message: "Technical error"};
+		   }
+	   })
+	   **/
+}
+
+export async function forwardMessage(){
+	let xf = await getValueFor("ace_current_msg"), l = await getValueFor("ace_current_label");
+	console.log(`forward msg with label ${l}, id ${xf}`);
+}
+
+export async function attachMessage(){
+	let xf = await getValueFor("ace_current_msg"), l = await getValueFor("ace_current_label");
+	console.log(`attach file to msg with label ${l}, id ${xf}`);
 }
