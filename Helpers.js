@@ -228,6 +228,10 @@ export function wvParse(s){
     let msg = await getValueFor("ace_current_msg"), l = await getValueFor("ace_current_label");	 
     n.navigate('InboxEditMessage',{op: "reply",l: l,msg: msg});
  }
+ export async function forward(n){
+    let msg = await getValueFor("ace_current_msg"), l = await getValueFor("ace_current_label");	 
+    n.navigate('InboxEditMessage',{op: "forward",l: l,msg: msg});
+ }
  
  export async function deleteMessage(){
 	let xf = await getValueFor("ace_current_msg"), l = await getValueFor("ace_current_label");

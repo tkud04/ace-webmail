@@ -29,7 +29,7 @@ const EditMessageHeaderBar = (props) => {
 	//let xf = await getValueFor("ace_current_xf");
 	const menu = [
 	{id: 3, name: 'attachment', title: 'Attach file', bgcolor: '#694fad', action: helpers.attachMessage, style: {marginRight:10}},
-	{id: 4, name: 'send', title: 'Send', bgcolor: '#694fad', action: helpers.forwardMessage, style: {marginRight:10}},
+	{id: 4, name: 'send', title: 'Send', bgcolor: '#694fad', action: helpers.sendMessage, style: {marginRight:10}},
 	{id: 2, name: 'text-box-remove', title: 'Discard', bgcolor: '#694fad', action: helpers.markMessageUnread}
 	
 	];
