@@ -4,10 +4,13 @@ import * as SecureStore from 'expo-secure-store';
 import * as Notifications from 'expo-notifications';
 import Constants from 'expo-constants';
 import { useNavigation } from '@react-navigation/native';
+import * as RootNavigation from './RootNavigation.js';
+
 
 //import RNPaystack from 'react-native-paystack';
 //import {showMessage, hideMessage} from 'react-native-flash-message';
 export const API = "https://mail.aceluxurystore.com/api";
+export const currentNav = null;
 
 export function tryParseJSON(jsonString){
     try {
@@ -232,7 +235,7 @@ export function wvParse(s){
     let msg = await getValueFor("ace_current_msg"), l = await getValueFor("ace_current_label");	 
     n.navigate('InboxEditMessage',{op: "forward",l: l,msg: msg});
  }
- 
+
  export async function deleteMessage(){
 	let xf = await getValueFor("ace_current_msg"), l = await getValueFor("ace_current_label");
     console.log(`delete msg with label ${l}, id ${xf}`);
@@ -243,18 +246,10 @@ export async function markMessageUnread(){
 	console.log(`mark msg with label ${l}, id ${xf} as unread`);
 }
 
-export async function replyMessage(){
-	let xf = await getValueFor("ace_current_msg"), l = await getValueFor("ace_current_label");
-	console.log(`reply msg with label ${l}, id ${xf}`);
-	/**
+export async function replyMessage(l,dt){
+	
 	//create request
-	let url = `${API}/message`;
-	let fd = new FormData();
-	       fd.append("u",u);
-	       fd.append("tk","kt");
-	       fd.append("m",m);
-	       fd.append("xf","reply");
-	       fd.append("c",c);
+	let url = `${API}/message`, dest = "";
 		   
 	const req = new Request(url,{method: 'POST', body: dt});
 	
@@ -268,15 +263,108 @@ export async function replyMessage(){
 			   return {status: "error", message: "Technical error"};
 		   }
 	   })
-	   **/
+	    .catch(error => {
+		    alert("Failed first to send reply: " + error);	
+	   })
+	   .then(res => {
+		   console.log(res);
+			// hideElem(['#rp-loading','#rp-submit']); 
+             	 
+		   if(res.status == "ok"){
+              alert("Message sent!");	
+               if(l == "inbox") dest = "Inbox";	  
+               else if(l == "drafts") dest = "Drafts";	  
+                 RootNavigation.navigate(dest);	   
+		   }
+		   else if(res.status == "error"){
+			   console.log(res.message);
+			 if(res.message == "validation" || res.message == "dt-validation"){
+				 alert(`<p class='text-primary'>Please enter a valid email address.</p>`);
+			 }
+			 else{
+			   alert("Got an error while sending reply: " + error);			
+			 }					 
+		   }
+		   		     
+	   }).catch(error => {
+		    alert("Failed to send reply: " + error);
+	   });
+	 
 }
 
-export async function forwardMessage(){
-	let xf = await getValueFor("ace_current_msg"), l = await getValueFor("ace_current_label");
-	console.log(`forward msg with label ${l}, id ${xf}`);
+export async function forwardMessage(l,dt){
+	//create request
+	let url = `${API}/message`, dest = "";
+		   
+	const req = new Request(url,{method: 'POST', body: dt});
+	
+	//fetch request
+	fetch(req)
+	   .then(response => {
+		   if(response.status === 200){
+			   return response.json();
+		   }
+		   else{
+			   return {status: "error", message: "Technical error"};
+		   }
+	   })
+	    .catch(error => {
+		    alert("Failed first to forward message: " + error);	
+	   })
+	   .then(res => {
+		   console.log(res);
+			// hideElem(['#rp-loading','#rp-submit']); 
+             	 
+		   if(res.status == "ok"){
+              alert("Message sent!");	
+               if(l == "inbox") dest = "Inbox";	  
+               else if(l == "drafts") dest = "Drafts";	  
+			   
+			    RootNavigation.navigate(dest);	  
+		   }
+		   else if(res.status == "error"){
+			   console.log(res.message);
+			 if(res.message == "validation" || res.message == "dt-validation"){
+				 alert(`<p class='text-primary'>Please enter a valid email address.</p>`);
+			 }
+			 else{
+			   alert("Got an error while forwarding message: " + error);			
+			 }					 
+		   }
+		   		     
+	   }).catch(error => {
+		    alert("Failed to forward message: " + error);
+	   });
 }
 
 export async function attachMessage(){
 	let xf = await getValueFor("ace_current_msg"), l = await getValueFor("ace_current_label");
 	console.log(`attach file to msg with label ${l}, id ${xf}`);
+}
+
+ export async function sendMessage(){
+	let xf = await getValueFor("ace_current_xf"), l = await getValueFor("ace_current_label"), op = await getValueFor("ace_current_op"),
+	     m = await getValueFor("ace_current_msgg"), u = await getValueFor("ace_u"), tk = await getValueFor("ace_tk");
+    console.log(`send msg (${op}) with label ${l}, id ${xf}`);
+	let fd = new FormData();
+	fd.append("u",u);
+    fd.append("tk",tk);
+	
+	if(op == "reply"){
+	       fd.append("m",xf);
+	       fd.append("xf","reply");
+	       fd.append("c",m);
+		   replyMessage(l,fd);
+	}
+	
+	else if(op == "forward"){
+		let t = await getValueFor("ace_current_t");
+	       fd.append("m",xf);
+	       fd.append("xf","forward");
+	       fd.append("c",m);
+	       fd.append("t",t);
+		   forwardMessage(l,fd);
+	}
+	
+	
 }

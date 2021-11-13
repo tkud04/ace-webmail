@@ -4,28 +4,45 @@ import { Platform, StyleSheet, View, Text, Pressable, FlatList, SafeAreaView, St
 import * as helpers from '../Helpers';
 
  import ListItem from '../components/ListItem.js';
-import  UserContext from '../contexts/UserContext';
+ import Checkbox from '../components/Checkbox.js';
+
+ import  UserContext from '../contexts/UserContext';
  
- const renderItem = ({ item }) => {
-   // const backgroundColor = item.id === selectedId ? "#6e3b6e" : "#f9c2ff";
-  //  const color = item.id === selectedId ? 'white' : 'black';
+ 
+ import  SelectedInboxContext from '../contexts/SelectedInboxContext';
+ import { SelectedInboxProvider } from '../contexts/SelectedInboxContext';
 
-    return (
-	 
-      <ListItem
-        item={item}
-        backgroundColor="#6e3b6e"
-      />
-	 
-    );
-  };
 
-function SentScreen(){
+function SentScreen({ navigation }){
 
    const [isLoading, setLoading] = useState(true);
    const [sent, setSent] = useState([]);
    const [reload, setReload] = useState(false);
    const uc = useContext(UserContext);
+    helpers.save('ace_current_label',"sent"); 
+
+    const renderItem = ({ item }) => {
+   // const backgroundColor = item.id === selectedId ? "#6e3b6e" : "#f9c2ff";
+  //  const color = item.id === selectedId ? 'white' : 'black';
+   
+    return (
+	 
+	  <View >
+	    
+        <ListItem
+          item={item}
+          backgroundColor="#6e3b6e"
+		  cc={
+			  <View style={{marginRight: 5, marginTop: 5,alignItems: "flex-end"}}>
+               <Checkbox id={item.id}/>
+              </View>  
+		  }
+        />
+		
+	 </View>
+	 
+    );
+  };
    
   // Similar to componentDidMount and componentDidUpdate:
   useEffect(() => {
@@ -56,6 +73,17 @@ function SentScreen(){
 	  .catch(e => console.log(e));
 	}
   });
+  
+  
+    useEffect(() => {
+	  let l = [];
+	for(let i = 0; i < sent.length; i++){
+      let ii = sent[i];
+	  l.push({id:ii.id,selected: false});
+	}
+	helpers.save('selected_sent',JSON.stringify(l));
+  });
+  
   
 	return (
 	   <View style={styles.container}>

@@ -8,7 +8,7 @@ import * as helpers from '../Helpers';
   
   
 
-function InboxEditMessageScreen({route,navigation}){
+function SentEditMessageScreen({route,navigation}){
 
    const [isLoading, setLoading] = useState(false);
    const [showMore, setShowMore] = useState(false);
@@ -188,4 +188,4 @@ const styles = StyleSheet.create({
   
 });
 
-export default InboxEditMessageScreen;
+export default SentEditMessageScreen;

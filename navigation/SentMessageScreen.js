@@ -9,7 +9,7 @@ import * as helpers from '../Helpers';
 
  import  UserContext from '../contexts/UserContext';
 
-function InboxMessageScreen({route,navigation}){
+function SentMessageScreen({route,navigation}){
    helpers.currentNav = navigation;
    const [isLoading, setLoading] = useState(false);
    const [showMore, setShowMore] = useState(false);
@@ -154,4 +154,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default InboxMessageScreen;
+export default SentMessageScreen;

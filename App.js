@@ -6,7 +6,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 //import * as SplashScreen from 'expo-splash-screen';
-
+import { navigationRef } from './RootNavigation.js';
 
 import SplashScreen from './components/SplashScreen.js';
 import { UserProvider } from './contexts/UserContext';
@@ -113,7 +113,7 @@ export default function App() {
    let irn = loggedIn ? "InboxStack" : "AuthStack";
   return (
      <UserProvider value={ctx}>
-	 <NavigationContainer>
+	 <NavigationContainer ref={navigationRef}>
       <Tab.Navigator
 	    initialRouteName={irn}
         activeColor="#f0edf6"

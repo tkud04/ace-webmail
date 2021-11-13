@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useState} from 'react';
 import {StatusBar, StyleSheet, View, Pressable, Text, Image } from 'react-native';
  import { useNavigation } from '@react-navigation/native';
  
@@ -36,9 +36,11 @@ const ItemCaption = (props) => {
 	);
 }
 
-const ListItem = (props) => {
+function ListItem(props){
 	const navigation = useNavigation();
 	let i = props.item, cc = props.cc;
+	//const [ibg, setIbg] = useState("#fff");
+	
 	//console.log('i: ',i);
 	return (
      <Pressable
@@ -47,13 +49,13 @@ const ListItem = (props) => {
 	   style={({ pressed }) => [
           {
             backgroundColor: pressed
-              ? 'rgb(0, 0, 0)'
+              ? '#694fad'
               : 'white'
           },
           styles.listButton
         ]}
 	 >
-	 <View style={styles.item}>
+	 <View style={[styles.item]}>
 	  <ItemAvatar letter={getLetter(i.sn)}/>
 	  <ItemCaption from={i.sn} subject={i.subject} extract={i.excerpt} status={i.status}/>
 	  {cc}
@@ -70,8 +72,8 @@ const styles = StyleSheet.create({
 	  flex: 1,
     padding: 5,
 	flexDirection: 'row',
-	backgroundColor: '#fff',
-	borderBottomWidth: 0.8
+	borderBottomWidth: 0.8,
+	borderColor: '#ccc'
   },
   caption: {
 	  padding: 5,
