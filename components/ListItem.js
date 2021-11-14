@@ -10,9 +10,13 @@ const getLetter = (str) => {
 	 console.log(`Selecting email with id ${id}`);
   }
   
-const showMessage = (item,n) => {
-	 console.log(`Showing email with id ${item.id}`);
-	 n.navigate('InboxMessage',{item: item});
+const showMessage = (item,lbl,n) => {
+	 console.log(`Showing email with id ${item.id}, lbl ${lbl}`);
+	 let dest = "";
+	 if(lbl == "inbox") dest = 'InboxMessage';
+	 else if(lbl == "sent") dest = 'SentMessage';
+	 //else if(lbl == "sent") dest = 'SentMessage';
+	 n.navigate(dest,{item: item});
   }
 
 const ItemAvatar = (props) => {
@@ -38,13 +42,13 @@ const ItemCaption = (props) => {
 
 function ListItem(props){
 	const navigation = useNavigation();
-	let i = props.item, cc = props.cc;
+	let i = props.item, cc = props.cc, l = props.l;
 	//const [ibg, setIbg] = useState("#fff");
 	
 	//console.log('i: ',i);
 	return (
      <Pressable
-	   onPress={() =>{showMessage(i, navigation)}}
+	   onPress={() =>{showMessage(i, l, navigation)}}
 	   onLongPress={() =>{selectMessage(i.id)}}
 	   style={({ pressed }) => [
           {

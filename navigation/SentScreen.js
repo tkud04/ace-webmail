@@ -37,6 +37,7 @@ function SentScreen({ navigation }){
                <Checkbox id={item.id}/>
               </View>  
 		  }
+		  l="sent"
         />
 		
 	 </View>
