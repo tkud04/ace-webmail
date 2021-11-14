@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { Platform, StyleSheet, View, Text, Pressable, FlatList, SafeAreaView, StatusBar } from 'react-native';
+import { Platform, StyleSheet, View, Text, Pressable, RefreshControl, FlatList, SafeAreaView, StatusBar } from 'react-native';
 
 import * as helpers from '../Helpers';
 
@@ -44,6 +44,16 @@ function SentScreen({ navigation }){
 	 
     );
   };
+  
+  const getSent = () => {
+	  // console.log("refreshing: ");
+	  let fi = helpers.fetchMessages({u: uc.u, tk: uc.tk, l: "sent"});
+	fi.then(d => {
+		setSent(d);
+		setReload(false);
+		})
+	  .catch(e => console.log(e));
+  }
    
   // Similar to componentDidMount and componentDidUpdate:
   useEffect(() => {
@@ -51,13 +61,7 @@ function SentScreen({ navigation }){
     // Fetch sent if possible
 	//console.log(`fetching new mail..`);
 	if(isLoading){
-    let fi = helpers.fetchMessages({u: uc.u, tk: uc.tk, l: "sent"});
-	fi.then(d => {
-		//console.log("d: ",d);
-		setSent(d);
-		setLoading(false);
-		})
-	  .catch(e => console.log(e));
+      getSent();
 	}
   });
   
@@ -66,12 +70,7 @@ function SentScreen({ navigation }){
     // Fetch sent if possible
 	//console.log(`fetching new mail..`);
 	if(reload){
-    let fi = helpers.fetchMessages({u: uc.u, tk: uc.tk, l: "sent"});
-	fi.then(d => {
-		setSent(d);
-		setReload(false);
-		})
-	  .catch(e => console.log(e));
+      getSent();
 	}
   });
   
@@ -94,6 +93,12 @@ function SentScreen({ navigation }){
            data={sent}
            renderItem={renderItem}
            keyExtractor={(item) => `msg-${item.id}`}
+		   refreshControl={
+             <RefreshControl
+               refreshing={reload}
+               onRefresh={() => {setReload(true); getSent()}}
+             />
+           }
          />
 		 :
 		 <View style={styles.empty}>

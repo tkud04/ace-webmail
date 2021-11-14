@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { Platform, StyleSheet, ActivityIndicator, View, Text, Pressable, FlatList, SafeAreaView, StatusBar } from 'react-native';
+import { Platform, StyleSheet, ActivityIndicator, View, Text, Pressable, RefreshControl, FlatList, SafeAreaView, StatusBar } from 'react-native';
 
 import * as helpers from '../Helpers';
 
@@ -17,6 +17,7 @@ function InboxScreen({ navigation }){
    const [isLoading, setLoading] = useState(true);
    const [inbox, setInbox] = useState([]);
    const [reload, setReload] = useState(false);
+   const [selectedId, setSelectedId] = useState(null);
    const uc = useContext(UserContext);
     helpers.save('ace_current_label',"inbox"); 
 
@@ -36,41 +37,37 @@ function InboxScreen({ navigation }){
                <Checkbox id={item.id}/>
               </View>  
 		  }
+		  l="inbox"
         />
 		
 	 </View>
 	 
     );
   };
-   
-   
-  // Similar to componentDidMount and componentDidUpdate:
-  useEffect(() => {
-	  //console.log('uc: ',uc);
-    // Fetch inbox if possible
-	//console.log(`fetching new mail..`);
-	if(isLoading){
-    let fi = helpers.fetchMessages({u: uc.u, tk: uc.tk, l: "inbox"});
-	fi.then(d => {
-		//console.log("d: ",d);
-		setInbox(d);
-		setLoading(false);
-		})
-	  .catch(e => console.log(e));
-	}
-  });
   
-  useEffect(() => {
-	  //console.log('uc: ',uc);
-    // Fetch inbox if possible
-	//console.log(`fetching new mail..`);
-	if(reload){
-    let fi = helpers.fetchMessages({u: uc.u, tk: uc.tk, l: "inbox"});
+  const getInbox = () => {
+	  // console.log("refreshing: ");
+	  let fi = helpers.fetchMessages({u: uc.u, tk: uc.tk, l: "inbox"});
 	fi.then(d => {
 		setInbox(d);
 		setReload(false);
 		})
 	  .catch(e => console.log(e));
+  }
+   
+   
+  // Similar to componentDidMount and componentDidUpdate:
+  useEffect(() => {
+    // Fetch inbox if possible
+	//console.log(`fetching new mail..`);
+	if(isLoading){
+    getInbox();
+	}
+  });
+  
+  useEffect(() => {
+	if(reload){
+      getInbox();
 	}
   });
 
@@ -92,6 +89,13 @@ function InboxScreen({ navigation }){
            data={inbox}
            renderItem={renderItem}
            keyExtractor={(item) => `msg-${item.id}`}
+		   refreshControl={
+             <RefreshControl
+               refreshing={reload}
+               onRefresh={() => {setReload(true); getInbox()}}
+             />
+           }
+		   
          />
 		 :
 		 <View style={styles.empty}>
