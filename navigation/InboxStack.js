@@ -26,7 +26,7 @@ function InboxStack(){
 	      name="InboxMessage" 
 		  component={InboxMessageScreen}
 		  options={{
-            headerTitle: (props) => <MessageHeaderBar {...props} />
+            headerTitle: (props) => <MessageHeaderBar l="inbox" {...props} />
           }}
 	    />
 		<Stack.Screen 

@@ -1,8 +1,13 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import SentScreen from './SentScreen.js';
+ import SentMessageScreen from './SentMessageScreen.js';
+
+import HeaderBar from '../components/HeaderBar';
+import MessageHeaderBar from '../components/MessageHeaderBar';
+import EditMessageHeaderBar from '../components/EditMessageHeaderBar';
  
- import HeaderBar from '../components/HeaderBar';
+ 
  
  
  const Stack = createStackNavigator();
@@ -18,6 +23,13 @@ function SentStack(){
       }}
 	  >
 	   <Stack.Screen name="Sent" component={SentScreen} />
+	   <Stack.Screen 
+	      name="SentMessage" 
+		  component={SentMessageScreen}
+		  options={{
+            headerTitle: (props) => <MessageHeaderBar l="sent" {...props} />
+          }}
+	    />
 	   </Stack.Navigator>
 	);
 }

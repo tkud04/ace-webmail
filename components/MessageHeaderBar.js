@@ -26,7 +26,7 @@ const IconButton = (props) => {
 
 const MessageHeaderBar = (props) => {
 	const n = useNavigation();
-	
+	console.log("op: ",props.l);
 	const menu = [
 	{id: 3, name: 'reply', title: 'Reply', bgcolor: '#694fad', action: () => helpers.reply(n), style: {marginRight:10}},
 	{id: 4, name: 'forward', title: 'Forward', bgcolor: '#694fad', action: () => helpers.forward(n), style: {marginRight:10}},
