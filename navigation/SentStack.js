@@ -19,7 +19,7 @@ function SentStack(){
 	   <Stack.Navigator
 	    initialRouteName="Sent"
 		screenOptions={{
-        headerTitle: (props) => <HeaderBar {...props} />
+        headerTitle: (props) => <HeaderBar l="sent" {...props} />
       }}
 	  >
 	   <Stack.Screen name="Sent" component={SentScreen} />

@@ -1,12 +1,14 @@
 import React from 'react';
 import {StatusBar, StyleSheet, Dimensions, Pressable, View, Text, Image } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import * as RootNavigation from '../RootNavigation.js';
 
-const newButtonClick = () => {
-	console.log('new button clicked');
+const newButtonClick = (l) => {
+	console.log('new button clicked');  
+    RootNavigation.navigate("Compose");	
 }
 
-const profileButtonClick = () => {
+const profileButtonClick = (l) => {
 	console.log('profile button clicked');
 }
 
@@ -32,14 +34,14 @@ const IconButton = (props) => {
 	);
 };
 
-const HeaderBar = () => {
+const HeaderBar = (props) => {
 	return (
 	 <View style={styles.container}>
-	  <IconButton name='plus' bgcolor='#694fad' action={newButtonClick} style={styles.newButton}/>
+	  <IconButton name='plus' bgcolor='#694fad' action={() => newButtonClick(props.l)} style={styles.newButton}/>
 	  <View style={styles.logoView}>
 	  <Image source={require('../assets/logo.png')}  style={{ width: 60, height: 60 }}/>
 	  </View>
-	  <IconButton name='account'  bgcolor='#694fad' action={profileButtonClick} style={styles.profileButton}/>
+	  <IconButton name='account'  bgcolor='#694fad' action={() => profileButtonClick(props.l)} style={styles.profileButton}/>
      </View>	
 	);
 }
@@ -59,10 +61,10 @@ const styles = StyleSheet.create({
 	  padding: 20
   },
   newButton: {
-	
+	color: "#fff"
   },
   profileButton: {
-	 
+	 color: "#fff"
   }, 
   logoView: {
 	 

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Platform, StyleSheet, View, Text} from 'react-native';
+import { Platform, StyleSheet, View, Text, Alert} from 'react-native';
 import * as SecureStore from 'expo-secure-store';
 import * as Notifications from 'expo-notifications';
 import Constants from 'expo-constants';
@@ -340,6 +340,24 @@ export async function forwardMessage(l,dt){
 export async function attachMessage(){
 	let xf = await getValueFor("ace_current_msg"), l = await getValueFor("ace_current_label");
 	console.log(`attach file to msg with label ${l}, id ${xf}`);
+}
+
+export async function discardMessage(){
+	let l = await getValueFor("ace_current_label");
+	console.log(`discard compose msg and return to label ${l}`);
+	
+	Alert.alert(
+      "Discard",
+      "Do you want to discard your message?",
+      [
+        {
+          text: "Save as draft",
+          onPress: () => console.log("Cancel Pressed"),
+          style: "cancel"
+        },
+        { text: "Yes", onPress: () => console.log("OK Pressed") }
+      ]
+    );
 }
 
  export async function sendMessage(){
