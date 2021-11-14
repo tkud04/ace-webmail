@@ -27,12 +27,14 @@ const IconButton = (props) => {
 const MessageHeaderBar = (props) => {
 	const n = useNavigation();
 	console.log("op: ",props.l);
-	const menu = [
+	const menu = l == "inbox" ? [
 	{id: 3, name: 'reply', title: 'Reply', bgcolor: '#694fad', action: () => helpers.reply(n), style: {marginRight:10}},
 	{id: 4, name: 'forward', title: 'Forward', bgcolor: '#694fad', action: () => helpers.forward(n), style: {marginRight:10}},
 	{id: 2, name: 'email', title: 'Mark unread', bgcolor: '#694fad', action: helpers.markMessageUnread, style: {marginRight:10}},
-	{id: 1, name: 'trash-can', title: 'Trash', bgcolor: '#694fad', action: helpers.deleteMessage},
-	
+	{id: 1, name: 'trash-can', title: 'Trash', bgcolor: '#694fad', action: helpers.deleteMessage},	
+	] : [
+	{id: 2, name: 'email', title: 'Mark unread', bgcolor: '#694fad', action: helpers.markMessageUnread, style: {marginRight:10}},
+	{id: 1, name: 'trash-can', title: 'Trash', bgcolor: '#694fad', action: helpers.deleteMessage},	
 	];
 	return (
 	 <View style={styles.container}>
