@@ -1951,6 +1951,11 @@
     sudo-prompt "^9.0.0"
     wcwidth "^1.0.1"
 
+"@react-native-community/netinfo@6.0.2":
+  version "6.0.2"
+  resolved "https://registry.yarnpkg.com/@react-native-community/netinfo/-/netinfo-6.0.2.tgz#3b61757c46d0f387815d42b651bbee1eb998a385"
+  integrity sha512-HbVIv6p+VAzSqALkfKKNbtSy0TneL7EILIqxiOjt/5weVdTuZ88NRyPNQAZBh6W8QYirXJo3f00ryMk9iLs7gQ==
+
 "@react-native-masked-view/masked-view@0.2.5":
   version "0.2.5"
   resolved "https://registry.yarnpkg.com/@react-native-masked-view/masked-view/-/masked-view-0.2.5.tgz#2505f269a53b134e3306a2772d981138e11f1537"
@@ -3346,6 +3351,13 @@ expo-modules-core@~0.4.4, expo-modules-core@~0.4.7:
   dependencies:
     compare-versions "^3.4.0"
     invariant "^2.2.4"
+
+expo-network@~4.0.3:
+  version "4.0.3"
+  resolved "https://registry.yarnpkg.com/expo-network/-/expo-network-4.0.3.tgz#21d7317b004ae8d1b16b56fd60bc3eca377198e3"
+  integrity sha512-9MBxNcaN2O2YinJa1UMNIoCaQkDA74roMLF1Gv/VsfysCd36qHTDH0m3mNUb2NNWAd+5b8O91Q6PLRGz1AJtog==
+  dependencies:
+    expo-modules-core "~0.4.4"
 
 expo-notifications@~0.13.3:
   version "0.13.3"

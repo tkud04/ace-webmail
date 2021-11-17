@@ -229,11 +229,14 @@ export function wvParse(s){
  
  export async function reply(n){
     let msg = await getValueFor("ace_current_msg"), l = await getValueFor("ace_current_label");	 
-    n.navigate('InboxEditMessage',{op: "reply",l: l,msg: msg});
+	let dest = "";
+	if(l == "inbox") dest = 'InboxEditMessage';
+    n.navigate(dest,{op: "reply",l: l,msg: msg});
  }
  export async function forward(n){
     let msg = await getValueFor("ace_current_msg"), l = await getValueFor("ace_current_label");	 
-    n.navigate('InboxEditMessage',{op: "forward",l: l,msg: msg});
+	if(l == "inbox") dest = 'InboxEditMessage';
+    n.navigate(dest,{op: "forward",l: l,msg: msg});
  }
 
  export async function deleteMessage(){
@@ -242,8 +245,66 @@ export function wvParse(s){
 }
 
 export async function markMessageUnread(){
-	let xf = await getValueFor("ace_current_msg"), l = await getValueFor("ace_current_label");
+	let xf = await getValueFor("ace_current_msg"), l = await getValueFor("ace_current_label"),
+       	u = await getValueFor("ace_u"), tk = await getValueFor("ace_tk");
 	console.log(`mark msg with label ${l}, id ${xf} as unread`);
+	
+	let fd = new FormData();
+	fd.append("u",u);
+    fd.append("tk",tk);
+    fd.append("dt",JSON.stringify([xf]));
+	
+	//create request
+	let url = `${API}/mark-unread`, dest = "";
+		   
+	const req = new Request(url,{method: 'POST', body: fd});
+	
+	//fetch request
+	fetch(req)
+	   .then(response => {
+		   if(response.status === 200){
+			   return response.json();
+		   }
+		   else{
+			   return {status: "error", message: "Technical error"};
+		   }
+	   })
+	    .catch(error => {
+		    alert("Failed first to mark message as unread: " + error);	
+	   })
+	   .then(res => {
+		   console.log(res);
+			// hideElem(['#rp-loading','#rp-submit']); 
+             	 
+		   if(res.status == "ok"){
+              alert("Done!");	
+               if(l == "inbox") dest = "Inbox";	  
+                resetEmailStorage();			   
+                 RootNavigation.navigate(dest);	   
+		   }
+		   else if(res.status == "error"){
+			   console.log(res.message);
+			   alert("Got an error while marking message as unread: " + res.message);				 
+		   }
+		   		     
+	   }).catch(error => {
+		    alert("Failed to mark message as unread: " + error);
+	   });
+	
+}
+
+export async function clearEmailStorage(){
+	let xf = await save("ace_current_msg");
+}
+
+export async function resetEmailStorage(){
+	await save("ace_current_msg","");
+	await save("ace_current_t","");
+	await save("ace_current_label","");
+	await save("ace_current_s","");
+	await save("ace_current_xf","");
+	await save("ace_current_op","");
+	await save("ace_current_msgg","");
 }
 
 export async function replyMessage(l,dt){
@@ -273,7 +334,8 @@ export async function replyMessage(l,dt){
 		   if(res.status == "ok"){
               alert("Message sent!");	
                if(l == "inbox") dest = "Inbox";	  
-               else if(l == "drafts") dest = "Drafts";	  
+               else if(l == "drafts") dest = "Drafts";	 
+                resetEmailStorage();			   
                  RootNavigation.navigate(dest);	   
 		   }
 		   else if(res.status == "error"){
@@ -319,7 +381,7 @@ export async function forwardMessage(l,dt){
               alert("Message sent!");	
                if(l == "inbox") dest = "Inbox";	  
                else if(l == "drafts") dest = "Drafts";	  
-			   
+			   resetEmailStorage();
 			    RootNavigation.navigate(dest);	  
 		   }
 		   else if(res.status == "error"){
@@ -334,6 +396,61 @@ export async function forwardMessage(l,dt){
 		   		     
 	   }).catch(error => {
 		    alert("Failed to forward message: " + error);
+	   });
+}
+
+export async function sendNewMessage(){
+		let  c = await getValueFor("ace_current_msgg"), t = await getValueFor("ace_current_t"), s = await getValueFor("ace_current_s"),
+       	u = await getValueFor("ace_u"), tk = await getValueFor("ace_tk");
+	//console.log(`mark msg with label ${l}, id ${xf} as unread`);
+	
+	let fd = new FormData();
+	fd.append("u",u);
+    fd.append("tk",tk);
+    fd.append("t",JSON.stringify([t]));
+    fd.append("s",s);
+    fd.append("c",c);
+	
+	//create request
+	let url = `${API}/new-message`, dest = "";
+		   
+	const req = new Request(url,{method: 'POST', body: fd});
+	
+	//fetch request
+	fetch(req)
+	   .then(response => {
+		   if(response.status === 200){
+			   return response.json();
+		   }
+		   else{
+			   return {status: "error", message: "Technical error"};
+		   }
+	   })
+	    .catch(error => {
+		    alert("Failed first to send new message: " + error);	
+	   })
+	   .then(res => {
+		   console.log(res);
+			// hideElem(['#rp-loading','#rp-submit']); 
+             	 
+		   if(res.status == "ok"){
+              alert("Message sent!");	
+              dest = "Inbox";	  
+			   resetEmailStorage();
+			    RootNavigation.navigate(dest);	  
+		   }
+		   else if(res.status == "error"){
+			   console.log(res.message);
+			 if(res.message == "validation" || res.message == "dt-validation"){
+				 alert(`Please enter all required fields.`);
+			 }
+			 else{
+			   alert("Got an error while sending new message: " + res.message);			
+			 }					 
+		   }
+		   		     
+	   }).catch(error => {
+		    alert("Failed to send new message: " + error);
 	   });
 }
 
@@ -382,6 +499,14 @@ export async function discardMessage(){
 	       fd.append("c",m);
 	       fd.append("t",t);
 		   forwardMessage(l,fd);
+	}
+	
+	else if(op == "new"){
+		let t = await getValueFor("ace_current_t"), s = await getValueFor("ace_current_s");
+	       fd.append("s",s);
+	       fd.append("c",m);
+	       fd.append("t",t);
+		   sendNewMessage(fd);
 	}
 	
 	

@@ -50,7 +50,7 @@ const toggleShowMore = () => {
 			 <TextInput
               style={styles.ti}
               value={subject}
-              onChangeText={t => {setSubject(t)}}
+              onChangeText={t => {setSubject(t); helpers.save('ace_current_s',t);}}
               placeholder="Subject"
             />
 		   </View>

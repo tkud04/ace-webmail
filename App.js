@@ -6,6 +6,8 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 //import * as SplashScreen from 'expo-splash-screen';
+import * as Network from 'expo-network';
+import NetInfo from '@react-native-community/netinfo';
 import { navigationRef } from './RootNavigation.js';
 
 import SplashScreen from './components/SplashScreen.js';
@@ -38,10 +40,17 @@ export default function App() {
 	const [u, setU] = useState(null);
 	
 	const [etk, setEtk] = useState('');
+	const [online, setOnline] = useState(false);
   const [notification, setNotification] = useState(false);
   const notificationListener = useRef();
   const responseListener = useRef();
   
+  const subscribeToNetworkChanges = NetInfo.addEventListener(state => {
+  console.log('Current state: ', state);
+  
+});
+
+
 	let ctx = {
 				loggedIn: loggedIn,
 				setLoggedIn: setLoggedIn,
@@ -50,7 +59,9 @@ export default function App() {
 				tk: tk,
 				setTk: setTk,
 				u: u,
-				setU: setU
+				setU: setU,
+				online: online,
+				setOnline: setOnline
 			};
 	
 	useEffect(() => {
@@ -72,6 +83,15 @@ export default function App() {
         // Artificially delay for two seconds to simulate a slow loading
         // experience. Please remove this if you copy and paste the code!
         await new Promise(resolve => setTimeout(resolve, 2000));
+		let o = null;
+		try{
+		  // To unsubscribe to these update, just use:
+          subscribeToNetworkChanges();
+		}
+		catch(e){
+		  console.warn(e);
+		}
+		
       } catch (e) {
         console.warn(e);
       } finally {
@@ -84,6 +104,7 @@ export default function App() {
   }, []);
   
   useEffect(() => {
+	  if(online){
     helpers.registerForPushNotificationsAsync().then(token => {
 		//alert('About to get push token for push notification!');
 	
@@ -102,7 +123,8 @@ export default function App() {
       Notifications.removeNotificationSubscription(notificationListener.current);
       Notifications.removeNotificationSubscription(responseListener.current);
     };
-  }, []);
+	  }
+  }, [online]);
   
 
   if (!isAppReady) {
