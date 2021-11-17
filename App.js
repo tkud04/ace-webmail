@@ -11,6 +11,7 @@ import NetInfo from '@react-native-community/netinfo';
 import { navigationRef } from './RootNavigation.js';
 
 import SplashScreen from './components/SplashScreen.js';
+import NetworkStatusAlert from './components/NetworkStatusAlert.js';
 import { UserProvider } from './contexts/UserContext';
 
 import AuthStack from './navigation/AuthStack';
@@ -44,10 +45,11 @@ export default function App() {
   const [notification, setNotification] = useState(false);
   const notificationListener = useRef();
   const responseListener = useRef();
+  let s = null;
   
   const subscribeToNetworkChanges = NetInfo.addEventListener(state => {
-  console.log('Current state: ', state);
-  
+  s = state.isInternetReachable;
+  if(s != online) setOnline(s);
 });
 
 
@@ -201,6 +203,7 @@ export default function App() {
        
       </Tab.Navigator>
 	  </NavigationContainer>
+	  {!online && <NetworkStatusAlert/>}
      </UserProvider>
   );
 }
