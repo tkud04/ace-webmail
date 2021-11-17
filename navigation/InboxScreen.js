@@ -45,14 +45,24 @@ function InboxScreen({ navigation }){
     );
   };
   
-  const getInbox = () => {
-	  // console.log("refreshing: ");
-	  let fi = helpers.fetchMessages({u: uc.u, tk: uc.tk, l: "inbox"});
-	fi.then(d => {
-		setInbox(d);
-		setReload(false);
+  const getInbox = (refresh=false) => {
+	 
+	  let ci = uc.currentInbox;
+	   console.log("cii: ", ci);
+	  if(ci == "" || refresh){ 
+		  let fi = helpers.fetchMessages({u: uc.u, tk: uc.tk, l: "inbox"}); 
+	      fi.then(d => {
+		    setInbox(d);
+		    uc.setCurrentInbox(JSON.stringify(d)); 
+			//bhfgf
+		    setReload(false);
 		})
 	  .catch(e => console.log(e));
+	  }
+	  else{
+		  setInbox(JSON.parse(ci));
+	  }
+	  
   }
    
    
@@ -62,14 +72,10 @@ function InboxScreen({ navigation }){
 	//console.log(`fetching new mail..`);
 	if(isLoading){
     getInbox();
+	//setLoading(false);
 	}
   });
-  
-  useEffect(() => {
-	if(reload){
-      getInbox();
-	}
-  });
+ 
 
   useEffect(() => {
 	  let l = [];
@@ -92,7 +98,7 @@ function InboxScreen({ navigation }){
 		   refreshControl={
              <RefreshControl
                refreshing={reload}
-               onRefresh={() => {setReload(true); getInbox()}}
+               onRefresh={() => {setReload(true); getInbox(true)}}
              />
            }
 		   

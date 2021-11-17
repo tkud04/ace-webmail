@@ -21,7 +21,7 @@ import SentStack from './navigation/SentStack';
 import MoreStack from './navigation/MoreStack';
 
 import * as Notifications from 'expo-notifications';
-import * as helpers from './Helpers';
+import * as helpers from './Helpers'; 
 
 const Tab = createMaterialBottomTabNavigator();
 
@@ -43,6 +43,7 @@ export default function App() {
 	const [etk, setEtk] = useState('');
 	const [online, setOnline] = useState(false);
   const [notification, setNotification] = useState(false);
+  const [currentInbox, setCurrentInbox] = useState("");
   const notificationListener = useRef();
   const responseListener = useRef();
   let s = null;
@@ -63,7 +64,9 @@ export default function App() {
 				u: u,
 				setU: setU,
 				online: online,
-				setOnline: setOnline
+				setOnline: setOnline,
+				currentInbox: currentInbox,
+				setCurrentInbox: setCurrentInbox
 			};
 	
 	useEffect(() => {
