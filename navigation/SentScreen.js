@@ -1,16 +1,19 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { Platform, StyleSheet, View, Text, Pressable, RefreshControl, FlatList, SafeAreaView, StatusBar } from 'react-native';
+import { Platform, StyleSheet, View, Text, Pressable, RefreshControl, FlatList, ScrollView, SafeAreaView, StatusBar } from 'react-native';
 
 import * as helpers from '../Helpers';
 
  import ListItem from '../components/ListItem.js';
  import Checkbox from '../components/Checkbox.js';
 
+
  import  UserContext from '../contexts/UserContext';
- 
+ import { showMessage, hideMessage } from "react-native-flash-message";
+
  
  import  SelectedInboxContext from '../contexts/SelectedInboxContext';
  import { SelectedInboxProvider } from '../contexts/SelectedInboxContext';
+ 
 
 
 function SentScreen({ navigation }){
@@ -45,31 +48,34 @@ function SentScreen({ navigation }){
     );
   };
   
-  const getSent = () => {
-	  // console.log("refreshing: ");
-	  let fi = helpers.fetchMessages({u: uc.u, tk: uc.tk, l: "sent"});
-	fi.then(d => {
-		setSent(d);
-		setReload(false);
-		})
-	  .catch(e => console.log(e));
+  const reloadSent = () => {
+	  let fi = helpers.fetchMessages({u: uc.u, tk: uc.tk, l: "sent"}); 
+	      fi.then(d => {
+		    setSent(d);
+		     setReload(false);
+		  }).catch(e => {
+			  let nm = "Your device is offline", ntt = "danger";
+	         showMessage({
+               message: nm,
+               type: ntt,
+             });
+		  });
   }
-   
+  
+  const getSent = () => { 
+	   console.log("sent: ", sent);
+	  if(sent.length < 1){
+		  console.log(`fetching new mail..`); 
+		  reloadSent(); 
+	  }
+  }
+
   // Similar to componentDidMount and componentDidUpdate:
   useEffect(() => {
 	  //console.log('uc: ',uc);
     // Fetch sent if possible
 	//console.log(`fetching new mail..`);
 	if(isLoading){
-      getSent();
-	}
-  });
-  
-  useEffect(() => {
-	  //console.log('uc: ',uc);
-    // Fetch sent if possible
-	//console.log(`fetching new mail..`);
-	if(reload){
       getSent();
 	}
   });
@@ -96,14 +102,23 @@ function SentScreen({ navigation }){
 		   refreshControl={
              <RefreshControl
                refreshing={reload}
-               onRefresh={() => {setReload(true); getSent()}}
+               onRefresh={() => {setReload(true); reloadSent()}}
              />
            }
          />
 		 :
-		 <View style={styles.empty}>
-		   <Text style={styles.emptyText}>Messages in your Sent folder will be displayed here</Text>
-		 </View>
+		 <ScrollView 
+		   refreshControl={
+             <RefreshControl
+               refreshing={reload}
+               onRefresh={() => {setReload(true); reloadSent()}}
+             />
+           }
+		 >
+		   <View style={styles.empty}>
+		     <Text style={styles.emptyText}>Messages in your Sent folder will be displayed here</Text>
+		   </View>
+		 </ScrollView>
 		   }
 	   </View>
 	);

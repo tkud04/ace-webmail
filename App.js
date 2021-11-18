@@ -6,12 +6,11 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 //import * as SplashScreen from 'expo-splash-screen';
-import * as Network from 'expo-network';
 import NetInfo from '@react-native-community/netinfo';
 import { navigationRef } from './RootNavigation.js';
+import FlashMessage, { showMessage, hideMessage } from "react-native-flash-message";
 
 import SplashScreen from './components/SplashScreen.js';
-import NetworkStatusAlert from './components/NetworkStatusAlert.js';
 import { UserProvider } from './contexts/UserContext';
 
 import AuthStack from './navigation/AuthStack';
@@ -34,7 +33,7 @@ Notifications.setNotificationHandler({
 });
 
 
-export default function App() {
+export default function App() { 
 	const [isAppReady, setIsAppReady] = useState(false);
 	const [loggedIn, setLoggedIn] = useState(false);
 	const [tk, setTk] = useState(null);
@@ -43,14 +42,23 @@ export default function App() {
 	const [etk, setEtk] = useState('');
 	const [online, setOnline] = useState(false);
   const [notification, setNotification] = useState(false);
-  const [currentInbox, setCurrentInbox] = useState("");
+  const [noNetworkAlerted, setNoNetworkAlerted] = useState(false);
   const notificationListener = useRef();
   const responseListener = useRef();
-  let s = null;
-  
+  let s = null, nm = "", ntt = "";
+
   const subscribeToNetworkChanges = NetInfo.addEventListener(state => {
   s = state.isInternetReachable;
-  if(s != online) setOnline(s);
+    if(s != online){
+	  setOnline(s);
+	  if(!s){
+		 nm = "Your device is offline", ntt = "danger";
+	  }
+	   showMessage({
+            message: nm,
+            type: ntt,
+          });
+    }
 });
 
 
@@ -65,8 +73,8 @@ export default function App() {
 				setU: setU,
 				online: online,
 				setOnline: setOnline,
-				currentInbox: currentInbox,
-				setCurrentInbox: setCurrentInbox
+				noNetworkAlerted: noNetworkAlerted,
+				setNoNetworkAlerted: setNoNetworkAlerted
 			};
 	
 	useEffect(() => {
@@ -88,7 +96,8 @@ export default function App() {
         // Artificially delay for two seconds to simulate a slow loading
         // experience. Please remove this if you copy and paste the code!
         await new Promise(resolve => setTimeout(resolve, 2000));
-		let o = null;
+		
+		
 		try{
 		  // To unsubscribe to these update, just use:
           subscribeToNetworkChanges();
@@ -96,6 +105,7 @@ export default function App() {
 		catch(e){
 		  console.warn(e);
 		}
+	
 		
       } catch (e) {
         console.warn(e);
@@ -206,8 +216,9 @@ export default function App() {
        
       </Tab.Navigator>
 	  </NavigationContainer>
-	  {!online && <NetworkStatusAlert/>}
+      <FlashMessage position="bottom" /> 
      </UserProvider>
+     
   );
 }
 

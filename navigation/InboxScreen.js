@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { Platform, StyleSheet, ActivityIndicator, View, Text, Pressable, RefreshControl, FlatList, SafeAreaView, StatusBar } from 'react-native';
+import { Platform, StyleSheet, ActivityIndicator, View, Text, Pressable, RefreshControl, FlatList, ScrollView, SafeAreaView, StatusBar } from 'react-native';
 
 import * as helpers from '../Helpers';
 
@@ -7,7 +7,8 @@ import * as helpers from '../Helpers';
  import Checkbox from '../components/Checkbox.js';
 
  import  UserContext from '../contexts/UserContext';
- 
+ import { showMessage, hideMessage } from "react-native-flash-message";
+
  
  import  SelectedInboxContext from '../contexts/SelectedInboxContext';
  import { SelectedInboxProvider } from '../contexts/SelectedInboxContext';
@@ -44,35 +45,38 @@ function InboxScreen({ navigation }){
 	 
     );
   };
-  
-  const getInbox = (refresh=false) => {
-	 
-	  let ci = uc.currentInbox;
-	   console.log("cii: ", ci);
-	  if(ci == "" || refresh){ 
-		  let fi = helpers.fetchMessages({u: uc.u, tk: uc.tk, l: "inbox"}); 
+
+  const reloadInbox = () => {
+	  let fi = helpers.fetchMessages({u: uc.u, tk: uc.tk, l: "inbox"}); 
 	      fi.then(d => {
 		    setInbox(d);
-		    uc.setCurrentInbox(JSON.stringify(d)); 
-			//bhfgf
-		    setReload(false);
-		})
-	  .catch(e => console.log(e));
-	  }
-	  else{
-		  setInbox(JSON.parse(ci));
-	  }
-	  
+		     setReload(false);
+		  }).catch(e => {
+			  let nm = "Your device is offline", ntt = "danger";
+	         showMessage({
+               message: nm,
+               type: ntt,
+             });
+		  });
   }
+  
+  const getInbox = () => { 
+	   console.log("inbox: ", inbox);
+	  if(inbox.length < 1){
+		  console.log(`fetching new mail..`); 
+		  reloadInbox(); 
+	  }
+  }
+
    
    
   // Similar to componentDidMount and componentDidUpdate:
   useEffect(() => {
     // Fetch inbox if possible
-	//console.log(`fetching new mail..`);
+	//console.log(`fetching new mail..`); 
 	if(isLoading){
     getInbox();
-	//setLoading(false);
+	setLoading(false);
 	}
   });
  
@@ -98,15 +102,24 @@ function InboxScreen({ navigation }){
 		   refreshControl={
              <RefreshControl
                refreshing={reload}
-               onRefresh={() => {setReload(true); getInbox(true)}}
+               onRefresh={() => {setReload(true); reloadInbox()}}
              />
            }
 		   
          />
 		 :
-		 <View style={styles.empty}>
-		   <Text style={styles.emptyText}>Messages in your inbox will be displayed here</Text>
-		 </View>
+		 <ScrollView 
+		   refreshControl={
+             <RefreshControl
+               refreshing={reload}
+               onRefresh={() => {setReload(true); reloadInbox()}}
+             />
+           }
+		 >
+		   <View style={styles.empty}>
+		     <Text style={styles.emptyText}>Messages in your inbox will be displayed here</Text>
+		   </View>
+		 </ScrollView>
 		   }
 	   </View>
 	);

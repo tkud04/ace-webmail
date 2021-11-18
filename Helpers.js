@@ -5,13 +5,12 @@ import * as Notifications from 'expo-notifications';
 import Constants from 'expo-constants';
 import { useNavigation } from '@react-navigation/native';
 import * as RootNavigation from './RootNavigation.js';
-
+import { showMessage, hideMessage } from "react-native-flash-message";
 
 //import RNPaystack from 'react-native-paystack';
 //import {showMessage, hideMessage} from 'react-native-flash-message';
 export const API = "https://mail.aceluxurystore.com/api";
 export const currentNav = null;
-
 
 export function tryParseJSON(jsonString){
     try {
@@ -114,7 +113,6 @@ export async function fetchMessages(dt){
 let ret = [], url = `${API}/messages?u=${dt.u}&tk=${dt.tk}&l=${dt.l}`;;
 //console.log("url: ",url);
 try {
-		
 	//create request
 	const req = new Request(url);
       const response = await fetch(url);
@@ -129,6 +127,7 @@ try {
 	  }
     } catch (error) {
       console.error(error);
+	  
     }
 //console.log("ret: ",ret);
 return ret;
