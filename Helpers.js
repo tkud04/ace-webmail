@@ -402,6 +402,15 @@ export async function forwardMessage(l,dt){
 export async function sendNewMessage(){
 		let  c = await getValueFor("ace_current_msgg"), t = await getValueFor("ace_current_t"), tt = [], s = await getValueFor("ace_current_s"),
        	u = await getValueFor("ace_u"), tk = await getValueFor("ace_tk");
+		console.log("[c, s, t]: ",[c, s, t]);
+		if(!c || !t || !s){
+			let nm = "Please fill all required details", ntt = "danger";
+	         showMessage({
+               message: nm,
+               type: ntt,
+             });
+		}
+		else{
 		tt.push({em: t});
 	console.log(`sennd new msg with label ${c}, s ${s} to [${t}]`);
 	
@@ -458,6 +467,7 @@ export async function sendNewMessage(){
 	   }).catch(error => {
 		    alert("Failed to send new message: " + error);
 	   });
+		}
 }
 
 export async function attachMessage(){
@@ -465,8 +475,68 @@ export async function attachMessage(){
 	console.log(`attach file to msg with label ${l}, id ${xf}`);
 }
 
+async function saveDraft(){
+		let  c = await getValueFor("ace_current_msgg"), t = await getValueFor("ace_current_t"), tt = [], s = await getValueFor("ace_current_s"),
+       	u = await getValueFor("ace_u"), tk = await getValueFor("ace_tk");
+		tt.push({em: t});
+		
+		let fd = new FormData();
+	fd.append("u",u);
+    fd.append("tk",tk);
+    fd.append("t",JSON.stringify(tt));
+    fd.append("s",s);
+    fd.append("c",c);
+	
+	//create request
+	let url = `${API}/save-draft`, dest = "";
+		   
+	const req = new Request(url,{method: 'POST', body: fd});
+	
+	//fetch request
+	fetch(req)
+	   .then(response => {
+		   if(response.status === 200){
+			   return response.json();
+		   }
+		   else{
+			   return {status: "error", message: "Technical error"};
+		   }
+	   })
+	    .catch(error => {
+		    alert("Failed first to save draft: " + error);	
+	   })
+	   .then(res => {
+		   console.log('res: ',res);
+			// hideElem(['#rp-loading','#rp-submit']); 
+           
+		   if(res.status == "ok"){
+              let nm = "saved to Drafts!", ntt = "success";
+	         showMessage({
+               message: nm,
+               type: ntt,
+             });
+              dest = "Inbox";	  
+			   resetEmailStorage();
+			    RootNavigation.navigate(dest);	  
+		   }
+		   else if(res.status == "error"){
+			   console.log(res.message);
+			 if(res.message == "validation" || res.message == "dt-validation"){
+				 alert(`Please enter all required fields.`);
+			 }
+			 else{
+			   alert("Got an error while saving draft: " + res.message);			
+			 }					 
+		   }
+		 
+		   		     
+	   }).catch(error => {
+		    alert("Failed to save draft: " + error);
+	   });
+}
+
 export async function discardMessage(){
-	let l = await getValueFor("ace_current_label");
+	let l = await getValueFor("ace_current_label"), dest = "Inbox";
 	console.log(`discard compose msg and return to label ${l}`);
 	
 	Alert.alert(
@@ -475,10 +545,19 @@ export async function discardMessage(){
       [
         {
           text: "Save as draft",
-          onPress: () => console.log("Cancel Pressed"),
+          onPress: () => {
+			  console.log("Cancel Pressed");
+			  //saveDraft();
+			  },
           style: "cancel"
         },
-        { text: "Yes", onPress: () => console.log("OK Pressed") }
+        { 
+		  text: "Yes",
+		  onPress: () => {
+			  console.log("OK Pressed");
+			   RootNavigation.navigate(dest);	  
+			  }
+		}
       ]
     );
 }
