@@ -400,14 +400,15 @@ export async function forwardMessage(l,dt){
 }
 
 export async function sendNewMessage(){
-		let  c = await getValueFor("ace_current_msgg"), t = await getValueFor("ace_current_t"), s = await getValueFor("ace_current_s"),
+		let  c = await getValueFor("ace_current_msgg"), t = await getValueFor("ace_current_t"), tt = [], s = await getValueFor("ace_current_s"),
        	u = await getValueFor("ace_u"), tk = await getValueFor("ace_tk");
-	//console.log(`mark msg with label ${l}, id ${xf} as unread`);
+		tt.push({em: t});
+	console.log(`sennd new msg with label ${c}, s ${s} to [${t}]`);
 	
 	let fd = new FormData();
 	fd.append("u",u);
     fd.append("tk",tk);
-    fd.append("t",JSON.stringify([t]));
+    fd.append("t",JSON.stringify(tt));
     fd.append("s",s);
     fd.append("c",c);
 	
@@ -430,11 +431,15 @@ export async function sendNewMessage(){
 		    alert("Failed first to send new message: " + error);	
 	   })
 	   .then(res => {
-		   console.log(res);
+		   console.log('res: ',res);
 			// hideElem(['#rp-loading','#rp-submit']); 
-             	 
+           
 		   if(res.status == "ok"){
-              alert("Message sent!");	
+              let nm = "Message sent!", ntt = "success";
+	         showMessage({
+               message: nm,
+               type: ntt,
+             });
               dest = "Inbox";	  
 			   resetEmailStorage();
 			    RootNavigation.navigate(dest);	  
@@ -448,6 +453,7 @@ export async function sendNewMessage(){
 			   alert("Got an error while sending new message: " + res.message);			
 			 }					 
 		   }
+		 
 		   		     
 	   }).catch(error => {
 		    alert("Failed to send new message: " + error);
