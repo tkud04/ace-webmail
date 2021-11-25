@@ -20,6 +20,7 @@ function DraftsScreen({ navigation }){
 	const [isLoading, setLoading] = useState(true);
    const [drafts, setDrafts] = useState([]);
    const [reload, setReload] = useState(false);
+    const [selectedId, setSelectedId] = useState(null);
    const uc = useContext(UserContext);
     helpers.save('ace_current_label',"drafts"); 
    
@@ -39,7 +40,7 @@ function DraftsScreen({ navigation }){
                <Checkbox id={item.id}/>
               </View>  
 		  }
-		  l="sent"
+		  l="drafts"
         />
 		
 	 </View>
@@ -68,14 +69,17 @@ function DraftsScreen({ navigation }){
 		  reloadDrafts(); 
 	  }
   }
-   
+
+ 
+ 
    // Similar to componentDidMount and componentDidUpdate:
   useEffect(() => {
 	  //console.log('uc: ',uc);
-    // Fetch sent if possible
+    // Fetch drafts if possible
 	//console.log(`fetching new mail..`);
 	if(isLoading){
       getDrafts();
+	  setLoading(false);
 	}
   });
   
@@ -95,7 +99,7 @@ function DraftsScreen({ navigation }){
 		   {
 		   drafts.length > 0 ?
 	     <FlatList
-           data={sent}
+           data={drafts}
            renderItem={renderItem}
            keyExtractor={(item) => `msg-${item.id}`}
 		   refreshControl={

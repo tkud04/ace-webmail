@@ -227,14 +227,18 @@ export function wvParse(s){
 	 return r;
  }
  
- export async function reply(n){
-    let msg = await getValueFor("ace_current_msg"), l = await getValueFor("ace_current_label");	 
+ export async function reply(dt){
+	 let {n, l} = dt;
+    let msg = await getValueFor("ace_current_msg");	 
 	let dest = "";
 	if(l == "inbox") dest = 'InboxEditMessage';
+	console.log(`l=`,l);
     n.navigate(dest,{op: "reply",l: l,msg: msg});
  }
- export async function forward(n){
-    let msg = await getValueFor("ace_current_msg"), l = await getValueFor("ace_current_label");	 
+ export async function forward(dt){
+	  let {n, l} = dt;
+    let msg = await getValueFor("ace_current_msg"); 
+	let dest = "";
 	if(l == "inbox") dest = 'InboxEditMessage';
     n.navigate(dest,{op: "forward",l: l,msg: msg});
  }
@@ -244,20 +248,47 @@ export function wvParse(s){
     console.log(`delete msg with label ${l}, id ${xf}`);
 }
 
-export async function markMessageUnread(){
-	let xf = await getValueFor("ace_current_msg"), l = await getValueFor("ace_current_label"),
-       	u = await getValueFor("ace_u"), tk = await getValueFor("ace_tk");
-	console.log(`mark msg with label ${l}, id ${xf} as unread`);
-	
-	let fd = new FormData();
-	fd.append("u",u);
-    fd.append("tk",tk);
-    fd.append("dt",JSON.stringify([xf]));
+export async function markMessageRead(dt){
+	 let {n, l} = dt;
+	let xf = await getValueFor("ace_current_xf"),	u = await getValueFor("ace_u"), tk = await getValueFor("ace_tk");
+	console.log(`mark msg with id ${xf} as read`);
 	
 	//create request
-	let url = `${API}/mark-unread`, dest = "";
+	let url = `${API}/mark-read?u=${u}&tk=${tk}&xf=${xf}`, dest = "";
 		   
-	const req = new Request(url,{method: 'POST', body: fd});
+	const req = new Request(url,{method: 'GET'});
+	
+	//fetch request
+	fetch(req)
+	   .then(response => {
+		   if(response.status === 200){
+			   return response.json();
+		   }
+		   else{
+			   return {status: "error", message: "Technical error"};
+		   }
+	   })
+	    .catch(error => {
+		    alert("Failed first to mark message as read: " + error);	
+	   })
+	   .then(res => {
+		   console.log(res);
+			
+	   }).catch(error => {
+		    alert("Failed to mark message as read: " + error);
+	   });
+	
+}
+
+export async function markMessageUnread(dt){
+	 let {n, l} = dt;
+	let xf = await getValueFor("ace_current_xf"),	u = await getValueFor("ace_u"), tk = await getValueFor("ace_tk");
+	console.log(`mark msg with id ${xf} as unread`);
+	
+	//create request
+	let url = `${API}/mark-unread?u=${u}&tk=${tk}&xf=${xf}`, dest = "";
+		   
+	const req = new Request(url,{method: 'GET'});
 	
 	//fetch request
 	fetch(req)
@@ -275,17 +306,22 @@ export async function markMessageUnread(){
 	   .then(res => {
 		   console.log(res);
 			// hideElem(['#rp-loading','#rp-submit']); 
-             	 
+             let nm = "", ntt = "";
+			 
 		   if(res.status == "ok"){
-              alert("Done!");	
-               if(l == "inbox") dest = "Inbox";	  
-                resetEmailStorage();			   
-                 RootNavigation.navigate(dest);	   
+               nm = "Done!", ntt = "success";
 		   }
 		   else if(res.status == "error"){
-			   console.log(res.message);
-			   alert("Got an error while marking message as unread: " + res.message);				 
+			    nm = "Something went wrong, please try again later", ntt = "error";				 
 		   }
+		   
+	         showMessage({
+               message: nm,
+               type: ntt,
+             });
+              
+			  if(l == "inbox") dest = 'InboxScreen';
+              n.navigate(dest);
 		   		     
 	   }).catch(error => {
 		    alert("Failed to mark message as unread: " + error);

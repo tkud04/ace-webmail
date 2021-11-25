@@ -9,7 +9,7 @@ import * as helpers from '../Helpers';
 
  import  UserContext from '../contexts/UserContext';
 
-function InboxMessageScreen({route,navigation}){
+function SpamMessageScreen({route,navigation}){
    helpers.currentNav = navigation;
    const [isLoading, setLoading] = useState(false);
    const [showMore, setShowMore] = useState(false);
@@ -40,10 +40,8 @@ const toggleShowMore = () => {
 	  //sconsole.log('item: ',item);
     // Fetch message if possible
 	//console.log(`fetching new mail..`);
-	if(item.status == "unread"){
-       helpers.markMessageRead(item.id);
-	   item.status == "read";
-	    helpers.save('ace_current_msg',JSON.stringify(item)); 
+	if(isLoading){
+    
 	}
   });
   
@@ -156,4 +154,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default InboxMessageScreen;
+export default SpamMessageScreen;

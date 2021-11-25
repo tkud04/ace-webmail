@@ -23,7 +23,7 @@ import * as Notifications from 'expo-notifications';
 import * as helpers from './Helpers'; 
 
 const Tab = createMaterialBottomTabNavigator();
-
+ 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
     shouldShowAlert: true,
