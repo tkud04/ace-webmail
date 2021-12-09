@@ -43,10 +43,10 @@ function MoreScreen(){
 }
 	
 	const items = [
-	 {key: 1, caption: "View messages in the Spam folder.", btn: "Spam", play: test},
-	 {key: 2, caption: "View messages in the Trash folder.", btn: "Trash", play: pp},
-	 {key: 3, caption: "View information about the app.", btn: "About", play: pp},
-	 {key: 4, caption: "Sign out of your account", btn: "Sign out", play: confirmSignout},
+	 {key: 'more-1', caption: "View messages in the Spam folder.", btn: "Spam", play: test},
+	 {key: 'more-2', caption: "View messages in the Trash folder.", btn: "Trash", play: pp},
+	 {key: 'more-3', caption: "View information about the app.", btn: "About", play: pp},
+	 {key: 'more-4', caption: "Sign out of your account", btn: "Sign out", play: confirmSignout},
 	];
     
 	return (
