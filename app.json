@@ -6,9 +6,9 @@
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "notification": {
-     "icon": "./assets/icon.png",
+      "icon": "./assets/icon.png"
     },
-	"splash": {
+    "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
@@ -20,15 +20,16 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.aceluxurystore.mail"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
       },
-    "googleServicesFile": "./google-services.json",
-    "package": "com.aceluxurystore.mail"
+      "googleServicesFile": "./google-services.json",
+      "package": "com.aceluxurystore.mail"
     },
     "web": {
       "favicon": "./assets/favicon.png"
